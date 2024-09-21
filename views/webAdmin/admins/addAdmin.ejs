@@ -1,0 +1,271 @@
+<%- include("../layouts/header.ejs") %>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
+
+    <style>
+        .iti {
+            width: 100%;
+        }
+
+        .alert-danger {
+            background: #e52828;
+            border-color: #e52828;
+            color: #ffffff;
+        }
+
+        h4 a {
+            color: #000000;
+        }
+
+        h4 a:hover {
+            color: #000;
+            text-decoration: none;
+        }
+
+
+        .button {
+            position: relative;
+            padding: 8px 16px;
+            background: #000;
+            color: #fff;
+            border: none;
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .button:active {
+            background: #80DEE4;
+        }
+
+        .button__text {
+            transition: all 0.2s;
+        }
+
+        .button--loading .button__text {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .button--loading::after {
+            content: "";
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+
+        .iti {
+            width: 100%;
+        }
+
+        .form-control {
+            border-radius: 0;
+            box-shadow: none;
+            height: 30px;
+            min-height: 35px;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            margin-left: 9px;
+        }
+    </style>
+
+    <div class="container-fluid">
+        <!-- row -->
+        <div class="row">
+            <div class="col-xl-6 col-xxl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" style="display: flex; align-items: center; justify-content: left;"><a
+                                href="/webAdmin/admin/admin-page"> <i class="fa fa-long-arrow-left"
+                                    style="font-size: 26px; margin-right: 10px;"></i></a>Add Admin</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="basic-form">
+                            <form id="user" method="post" enctype="multipart/form-data">
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label>Full Name :</label>
+                                        <input type="text" name="fullName" class="form-control firstLatterCapital"
+                                            placeholder="FullName">
+                                    </div>
+                                    <br>
+                                    <div class="form-group col-md-12">
+                                        <label>Email :</label>
+                                        <input type="email" name="email" class="form-control" placeholder="Email"
+                                            oninput="this.value=this.value.toLowerCase()">
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label>Password :</label>
+                                        <div class="input-group">
+                                            <input type="password" name="password" id="password" class="form-control"
+                                                placeholder="Password">
+                                            <div class="input-group-append">
+                                                <button type="button" id="togglePassword" class="btn btn-dark"
+                                                    onclick="togglePasswordVisibility()"><i
+                                                        class="fa fa-eye"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label>Profile Image :</label>
+                                        <input type="file" name="image" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label>Assign Tasks :</label>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="assignRoles" value="Product Manager"
+                                                class="form-check-input">
+                                            <label class="form-check-label">Product Manager</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="assignRoles" value="Acquisition Manager"
+                                                class="form-check-input">
+                                            <label class="form-check-label">Acquisition Manager</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="assignRoles" value="Order Manager"
+                                                class="form-check-input">
+                                            <label class="form-check-label">Order Manager</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="assignRoles" value="Customer Support Specialist"
+                                                class="form-check-input">
+                                            <label class="form-check-label">Customer Support Specialist</label>
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="submit_btn" class="btn btn-dark">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+        <script
+            src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js'></script>
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+        <script>
+            $('#manage-user').addClass('mm-active')
+            $('#pageTitle').text('Add User');
+
+            $("#success").show().delay(5000).fadeOut();
+            $("#error").show().delay(5000).fadeOut();
+
+
+            $(document).ready(function () {
+
+                $("#user").validate({
+                    rules: {
+                        fullName: {
+                            required: true,
+                        },
+                        email: {
+                            required: true,
+                            emailordomain: true,
+                        },
+                        password: {
+                            required: true,
+                        },
+                        image: {
+                            required: true,
+                            imageExtension: true,
+                        },
+                        assignRoles: {
+                            required: true,
+                        },
+                    },
+                    messages: {
+                        fullName: {
+                            required: "Please enter your full name.",
+                        },
+                        email: {
+                            required: "Please enter a valid email address.",
+                        },
+                        password: {
+                            required: "Please enter your password.",
+                        },
+                        image: {
+                            required: "Please select an image file.",
+                        },
+                        assignRoles: {
+                            required: "At least one role is required.",
+                        },
+                    },
+                    errorElement: 'span',
+                    errorPlacement: function (error, element) {
+                        error.addClass('invalid-feedback');
+                        element.closest('.form-group').append(error);
+                    },
+                    highlight: function (element, errorClass, validClass) {
+                        $(element).addClass('is-invalid').removeClass(validClass);
+                    },
+                    unhighlight: function (element, errorClass, validClass) {
+                        $(element).removeClass('is-invalid').addClass(validClass);
+                    }
+                });
+
+
+                $('.firstLatterCapital').keyup(function (event) {
+                    var textBox = event.target;
+                    var start = textBox.selectionStart;
+                    var end = textBox.selectionEnd;
+
+                    // Capitalize the first letter of each word after a space
+                    textBox.value = textBox.value.toLowerCase().replace(/(?:^|\s)\w/g, function (match) {
+                        return match.toUpperCase();
+                    });
+
+                    textBox.setSelectionRange(start, end);
+                });
+
+
+                jQuery.validator.addMethod("noSpace", function (value, element) {
+                    return value == '' || value.trim().length != 0;
+                }, "No space please and don't leave it empty.");
+
+                $.validator.addMethod("imageExtension", function (value, element) {
+                    var allowedExtensions = ["jpg", "jpeg", "png", "svg"];
+                    var fileExtension = value.split('.').pop().toLowerCase();
+                    return $.inArray(fileExtension, allowedExtensions) !== -1;
+                }, "Please select a valid image file (JPG, JPEG, PNG,SVG).");
+
+                jQuery.validator.addMethod("emailordomain", function (value, element) {
+                    return this.optional(element) || /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) || /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/.test(value);
+                }, "Please enter a valid email address.");
+            });
+
+            function togglePasswordVisibility() {
+                var passwordInput = document.getElementById('password');
+                var toggleButton = document.getElementById('togglePassword');
+
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleButton.innerHTML = '<i class="fa fa-eye-slash"></i>';
+                } else {
+                    passwordInput.type = 'password';
+                    toggleButton.innerHTML = '<i class="fa fa-eye"></i>';
+                }
+            }
+
+        </script>
+
+        <%- include("../layouts/footer.ejs") %>

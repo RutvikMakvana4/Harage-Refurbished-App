@@ -1,0 +1,14 @@
+node_modules
+.env
+
+public/usersProfile
+public/productImages
+public/itemImages
+public/adminProfile
+public/adminImages
+public/memberProfile
+public/invoices
+public/reportImage
+public/returnexchange
+
+firebase-adminsdk.json

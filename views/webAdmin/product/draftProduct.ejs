@@ -1,0 +1,919 @@
+<%- include("../layouts/header.ejs") %>
+
+    <style>
+        p {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        table.dataTable.dtr-inline.collapsed>tbody>tr>td {
+            white-space: nowrap;
+        }
+
+        table.dataTable tbody td {
+            white-space: nowrap;
+        }
+
+        table.dataTable thead tr {
+            white-space: nowrap;
+        }
+
+        .dataTables_scroll {
+            padding: 0.5rem 0;
+        }
+
+        .wrapped-content {
+            overflow: hidden;
+            width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .wrapped-content:hover {
+            -webkit-line-clamp: initial;
+        }
+
+        h4 a {
+            color: #000000;
+        }
+
+        h4 a:hover {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            margin-left: 1px;
+        }
+
+        #dataContainer p {
+            margin-bottom: 0 !important;
+            align-items: center;
+            display: flex;
+            padding: 10px 15px !important;
+            color: #000;
+            word-break: break-word;
+        }
+
+        #dataContainer span {
+            display: flex !important;
+            align-items: center;
+            padding: 10px 15px !important;
+            color: #000;
+            background-color: #D9D9D9;
+        }
+
+        .table-border-bottom {
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+    </style>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title"><a href="/webAdmin/product/product-page/all"> <i
+                                    class="fa fa-long-arrow-left"
+                                    style="font-size: 26px; margin-right: 10px;"></i></a>Draft Products</h4>
+                        <!-- Add the dropdown for last searches -->
+                        <div class="dropdown text-end mt-2">
+                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                id="lastSearchesDropdownButton" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                Last Searches
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="lastSearchesDropdownButton">
+                                <ul id="lastSearchesDropdown" class="list-unstyled">
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="productlist" class="table table-striped table-bordered zero-configuration">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20px;">No.</th>
+                                        <th style="width: 150px;">Product Name</th>
+                                        <th style="width: 300px;">Description</th>
+                                        <th>Brand</th>
+                                        <th>Model</th>
+                                        <th>Price</th>
+                                        <th>Condition</th>
+                                        <th style="width: 29px;">View</th>
+                                        <th style="width: 44px;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- model demo  -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+        data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered  modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" style="color: #000; margin-left: 14px;" id="productName"></h1>
+                    <i data-bs-dismiss="modal" aria-label="Close" class="fa fa-times"
+                        style="font-size: 22px;color: #000;cursor: pointer;" aria-hidden="true"></i>
+                </div>
+                <div class="modal-body">
+
+                    <div class="hh">
+                        <div id="imageContainer">&nbsp;</div><br>
+                        <br>
+                        <div id="dataContainer">
+                            <div class="d-flex table-border-bottom description">
+                                <span class="d-inline-block col-4">Description</span>
+                                <p class="text-break" id="description"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom brand">
+                                <span class="d-inline-block col-4">Brand</span>
+                                <p id="brand"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom model">
+                                <span class="d-inline-block col-4">Model</span>
+                                <p id="model"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom price">
+                                <span class="d-inline-block col-4">Price</span>
+                                <p id="price"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom condition">
+                                <span class="d-inline-block col-4">Condition</span>
+                                <p id="condition"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom warrantyStatus">
+                                <span class="d-inline-block col-4">Warranty Status</span>
+                                <p id="warrantyStatus"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom additionalFeatures">
+                                <span class="d-inline-block col-4">Additional Features</span>
+                                <p id="additionalFeatures"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom screenSize">
+                                <span class="d-inline-block col-4">Screen Size</span>
+                                <p id="screenSize"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom screenType">
+                                <span class="d-inline-block col-4">Screen Type</span>
+                                <p id="screenType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom resolution">
+                                <span class="d-inline-block col-4">Resolution</span>
+                                <p id="resolution"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom smartTv">
+                                <span class="d-inline-block col-4">Smart Tv</span>
+                                <p id="smartTv"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom hdr">
+                                <span class="d-inline-block col-4">HDR (High Dynamic Range)</span>
+                                <p id="hdr"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom color">
+                                <span class="d-inline-block col-4">Color</span>
+                                <p id="color"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom connectivity">
+                                <span class="d-inline-block col-4">Connectivity</span>
+                                <p id="connectivity"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom earCoupling">
+                                <span class="d-inline-block col-4">Ear Coupling</span>
+                                <p id="earCoupling"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom mountType">
+                                <span class="d-inline-block col-4">Mount Type</span>
+                                <p id="mountType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom vesaCompatibility">
+                                <span class="d-inline-block col-4">Vesa Compatibility</span>
+                                <p id="vesaCompatibility"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom weightCapacity">
+                                <span class="d-inline-block col-4">Weight Capacity</span>
+                                <p id="weightCapacity"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom screenSizeRange">
+                                <span class="d-inline-block col-4">Screen Size Range</span>
+                                <p id="screenSizeRange"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom length">
+                                <span class="d-inline-block col-4">Length</span>
+                                <p id="length"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom hdmiVersion">
+                                <span class="d-inline-block col-4">HDMI Version</span>
+                                <p id="hdmiVersion"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom remoteCompatibility">
+                                <span class="d-inline-block col-4">Remote Compatibility</span>
+                                <p id="remoteCompatibility"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom type">
+                                <span class="d-inline-block col-4">Type</span>
+                                <p id="type"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom formFactor">
+                                <span class="d-inline-block col-4">Form Factor</span>
+                                <p id="formFactor"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom processor">
+                                <span class="d-inline-block col-4">Processor</span>
+                                <p id="processor"></p>
+                            </div>
+
+                            <div class="d-flex table-border-bottom ram">
+                                <span class="d-inline-block col-4">Ram</span>
+                                <p id="ram"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom storage">
+                                <span class="d-inline-block col-4">Storage</span>
+                                <p id="storage"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom graphicsCard">
+                                <span class="d-inline-block col-4">Graphics Card</span>
+                                <p id="graphicsCard"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom operatingSystem">
+                                <span class="d-inline-block col-4">Operating System</span>
+                                <p id="operatingSystem"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom displayResolution">
+                                <span class="d-inline-block col-4">Display Resolution</span>
+                                <p id="displayResolution"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom displaySize">
+                                <span class="d-inline-block col-4">Display Size</span>
+                                <p id="displaySize"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom displayRefreshRate">
+                                <span class="d-inline-block col-4">Display Refresh Rate</span>
+                                <p id="displayRefreshRate"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom switchType">
+                                <span class="d-inline-block col-4">Switch Type</span>
+                                <p id="switchType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom layout">
+                                <span class="d-inline-block col-4">Layout</span>
+                                <p id="layout"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom sensorType">
+                                <span class="d-inline-block col-4">Sensor Type</span>
+                                <p id="sensorType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom maxDpi">
+                                <span class="d-inline-block col-4">Max Dpi</span>
+                                <p id="maxDpi"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom numberOfButtons">
+                                <span class="d-inline-block col-4">Number of Buttons</span>
+                                <p id="numberOfButtons"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom headedness">
+                                <span class="d-inline-block col-4">Headedness</span>
+                                <p id="headedness"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom material">
+                                <span class="d-inline-block col-4">Material</span>
+                                <p id="material"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom bagType">
+                                <span class="d-inline-block col-4">Bag Type</span>
+                                <p id="bagType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom fitsLaptopSize">
+                                <span class="d-inline-block col-4">Fits Laptop Size</span>
+                                <p id="fitsLaptopSize"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom storageCapacity">
+                                <span class="d-inline-block col-4">Storage Capacity</span>
+                                <p id="storageCapacity"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom driveType">
+                                <span class="d-inline-block col-4">Drive Type</span>
+                                <p id="driveType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom interface">
+                                <span class="d-inline-block col-4">Interface</span>
+                                <p id="interface"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom networkCompatibility">
+                                <span class="d-inline-block col-4">Network Compatibility</span>
+                                <p id="networkCompatibility"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom carrier">
+                                <span class="d-inline-block col-4">Carrier</span>
+                                <p id="carrier"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom displayType">
+                                <span class="d-inline-block col-4">Display Type</span>
+                                <p id="displayType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom cameraDetails">
+                                <span class="d-inline-block col-4">Camera Details</span>
+                                <p id="cameraDetails"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom compatibility">
+                                <span class="d-inline-block col-4">Compatibility</span>
+                                <p id="compatibility"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom bandStyle">
+                                <span class="d-inline-block col-4">BandStyle</span>
+                                <p id="bandStyle"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom caseType">
+                                <span class="d-inline-block col-4">Case Type</span>
+                                <p id="caseType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom chargerType">
+                                <span class="d-inline-block col-4">Charger Type</span>
+                                <p id="chargerType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom outputPower">
+                                <span class="d-inline-block col-4">Output Power</span>
+                                <p id="outputPower"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom connectorType">
+                                <span class="d-inline-block col-4">Connector Type</span>
+                                <p id="connectorType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom compatibleDevices">
+                                <span class="d-inline-block col-4">Compatible Devices</span>
+                                <p id="compatibleDevices"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom accessories">
+                                <span class="d-inline-block col-4">Accessories</span>
+                                <p id="accessories"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom discEdition">
+                                <span class="d-inline-block col-4">Disc Edition</span>
+                                <p id="discEdition"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom consoleGeneration">
+                                <span class="d-inline-block col-4">Console Generation</span>
+                                <p id="consoleGeneration"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom consoleModel">
+                                <span class="d-inline-block col-4">Console Model</span>
+                                <p id="consoleModel"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom compatiblePlatforms">
+                                <span class="d-inline-block col-4">Compatible Platforms</span>
+                                <p id="compatiblePlatforms"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom connectionType">
+                                <span class="d-inline-block col-4">Connection Type</span>
+                                <p id="connectionType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom size">
+                                <span class="d-inline-block col-4">Size</span>
+                                <p id="size"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom gripStyle">
+                                <span class="d-inline-block col-4">Grip Style</span>
+                                <p id="gripStyle"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom weight">
+                                <span class="d-inline-block col-4">Weight</span>
+                                <p id="weight"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom platformCompatibility">
+                                <span class="d-inline-block col-4">Platform Compatibility</span>
+                                <p id="platformCompatibility"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom audioType">
+                                <span class="d-inline-block col-4">Audio Type</span>
+                                <p id="audioType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom refrigeratorType">
+                                <span class="d-inline-block col-4">Refrigerator Type</span>
+                                <p id="refrigeratorType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom totalCapacity">
+                                <span class="d-inline-block col-4">Total Capacity</span>
+                                <p id="totalCapacity"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom washerType">
+                                <span class="d-inline-block col-4">Washer Type</span>
+                                <p id="washerType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom capacity">
+                                <span class="d-inline-block col-4">Capacity</span>
+                                <p id="capacity"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom acType">
+                                <span class="d-inline-block col-4">AC Type</span>
+                                <p id="acType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom coolingCapacity">
+                                <span class="d-inline-block col-4">Cooling Capacity</span>
+                                <p id="coolingCapacity"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom vacuumType">
+                                <span class="d-inline-block col-4">Vacuum Type</span>
+                                <p id="vacuumType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom cordedCordless">
+                                <span class="d-inline-block col-4">Corded/Cordless</span>
+                                <p id="cordedCordless"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom sliceCapacity">
+                                <span class="d-inline-block col-4">Slice Capacity</span>
+                                <p id="sliceCapacity"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom blenderType">
+                                <span class="d-inline-block col-4">Blender Type</span>
+                                <p id="blenderType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom jarCapacity">
+                                <span class="d-inline-block col-4">Jar Capacity</span>
+                                <p id="jarCapacity"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom power">
+                                <span class="d-inline-block col-4">Power</span>
+                                <p id="power"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom coffeeType">
+                                <span class="d-inline-block col-4">Coffee Type</span>
+                                <p id="coffeeType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom hvacSystemCompatibility">
+                                <span class="d-inline-block col-4">HVAC System Compatibility</span>
+                                <p id="hvacSystemCompatibility"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom deviceType">
+                                <span class="d-inline-block col-4">Device Type</span>
+                                <p id="deviceType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom videoResolution">
+                                <span class="d-inline-block col-4">Video Resolution</span>
+                                <p id="videoResolution"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom suitableFor">
+                                <span class="d-inline-block col-4">Suitable For</span>
+                                <p id="suitableFor"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom lockType">
+                                <span class="d-inline-block col-4">Lock Type</span>
+                                <p id="lockType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom lightingType">
+                                <span class="d-inline-block col-4">Lighting Type</span>
+                                <p id="lightingType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom shaverType">
+                                <span class="d-inline-block col-4">Shaver Type</span>
+                                <p id="shaverType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom wattage">
+                                <span class="d-inline-block col-4">Wattage</span>
+                                <p id="wattage"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom hairDryerType">
+                                <span class="d-inline-block col-4">Hair Dryer Type</span>
+                                <p id="hairDryerType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom primaryUseCases">
+                                <span class="d-inline-block col-4">Primary Use Cases</span>
+                                <p id="primaryUseCases"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom compatibleWith">
+                                <span class="d-inline-block col-4">Compatible With</span>
+                                <p id="compatibleWith"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom monitorType">
+                                <span class="d-inline-block col-4">Monitor Type</span>
+                                <p id="monitorType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom display">
+                                <span class="d-inline-block col-4">Display</span>
+                                <p id="display"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom wearStyle">
+                                <span class="d-inline-block col-4">Wear Style</span>
+                                <p id="wearStyle"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom sleepTracking">
+                                <span class="d-inline-block col-4">Sleep Tracking</span>
+                                <p id="sleepTracking"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom measurements">
+                                <span class="d-inline-block col-4">Measurements</span>
+                                <p id="measurements"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom compatibleApps">
+                                <span class="d-inline-block col-4">Compatible Apps</span>
+                                <p id="compatibleApps"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom maxVideoResolution">
+                                <span class="d-inline-block col-4">Max Video Resolution</span>
+                                <p id="maxVideoResolution"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom cameraType">
+                                <span class="d-inline-block col-4">Camera Type</span>
+                                <p id="cameraType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom sensorSize">
+                                <span class="d-inline-block col-4">Sensor Size</span>
+                                <p id="sensorSize"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom megaPixels">
+                                <span class="d-inline-block col-4">Mega Pixels</span>
+                                <p id="megaPixels"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom lensMount">
+                                <span class="d-inline-block col-4">Lens Mount</span>
+                                <p id="lensMount"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom lensType">
+                                <span class="d-inline-block col-4">Lens Type</span>
+                                <p id="lensType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom includedLenses">
+                                <span class="d-inline-block col-4">Included Lenses</span>
+                                <p id="includedLenses"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom primaryMaterial">
+                                <span class="d-inline-block col-4">Primary Material</span>
+                                <p id="primaryMaterial"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom focalLength">
+                                <span class="d-inline-block col-4">Focal Length</span>
+                                <p id="focalLength"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom maximumAperture">
+                                <span class="d-inline-block col-4">Maximum Aperture</span>
+                                <p id="maximumAperture"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom tripodType">
+                                <span class="d-inline-block col-4">Tripod Type</span>
+                                <p id="tripodType"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom maximumHeight">
+                                <span class="d-inline-block col-4">Maximum Height</span>
+                                <p id="maximumHeight"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom foldedLength">
+                                <span class="d-inline-block col-4">Folded Length</span>
+                                <p id="foldedLength"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom loadCapacity">
+                                <span class="d-inline-block col-4">Load Capacity</span>
+                                <p id="loadCapacity"></p>
+                            </div>
+                            <div class="d-flex table-border-bottom headType">
+                                <span class="d-inline-block col-4">Head Type</span>
+                                <p id="headType"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+
+        jQuery(document).ready(function () {
+            var table = $('#productlist').DataTable({
+                paging: true,
+                responsive: true,
+                searching: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                suppressScrollX: false,
+                language: {
+                    oPaginate: {
+                        sNext: '<i class="fa fa-forward"></i>',
+                        sPrevious: '<i class="fa fa-backward"></i>',
+                        sFirst: '<i class="fa fa-step-backward"></i>',
+                        sLast: '<i class="fa fa-step-forward"></i>'
+                    }
+                },
+                ajax: {
+                    url: "<%= process.env.APP_URL_ADMIN %>/webAdmin/product/draft-product-list",
+                    type: "GET",
+                },
+                columns: [
+                    {
+                        "data": "id",
+                        "render": function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        "data": "productName",
+                        "render": function (data, type, row, meta) {
+                            return row.productName
+                        }
+                    },
+                    {
+                        "data": "description",
+                        "render": function (data, type, row, meta) {
+                            return row.description != null ? `<div class="wrapped-content" style="width: 290px; word-wrap: break-word; text-wrap: initial;"> ${row.description} </div>` : `<div style="text-align: center; font-weight: 700;">-</div>`
+                        }
+                    },
+                    {
+                        "data": "brand",
+                        "render": function (data, type, row) {
+                            return row.brand
+                        }
+                    },
+                    {
+                        "data": "model",
+                        "render": function (data, type, row) {
+                            return row.model
+                        }
+                    },
+                    {
+                        "data": "price",
+                        "render": function (data, type, row) {
+                            return row.price
+                        }
+                    },
+                    {
+                        "data": "condition",
+                        "render": function (data, type, row) {
+                            return row.condition
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return `<a href="#!" onclick="viewProduct('${row._id}')" data-bs-toggle="modal" data-bs-target="#exampleModal"><img src="${'<%= process.env.APP_URL_ADMIN %>'}/adminWeb/img/profile-image/profile.png" height="35"/></a> `
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+
+                            return `<a href="/webAdmin/product/updateProductPage/${row._id}" class="btn btn-primary shadow btn-xs sharp me-1" ><i class="fa fa-pencil"></i></a>` + `<a class="btn btn-danger shadow btn-xs sharp" onclick="deleteProduct('${row._id}')" ><i class="fa fa-trash"></i></a>`
+                        }
+
+                    },
+                ],
+            });
+
+            function saveKeywordsToDatabase(keyword, type = "6") {
+                $.ajax({
+                    url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/save-history/save?saveDraftProductsKeywords=${keyword}&type=${type}`,
+                    type: 'POST',
+                    data: { saveDraftProductsKeywords: keyword },
+                    success: function (data) {
+                        console.log('Search keyword saved successfully:', keyword);
+                    },
+                    error: function (error) {
+                        console.error('Error saving search keyword:', error);
+                    }
+                });
+            }
+
+            var currentSearch = '';
+
+            $('#productlist_filter input').on('keyup', function () {
+                var previousSearch = currentSearch;
+
+                currentSearch = $(this).val().trim();
+
+                if (previousSearch && !currentSearch) {
+                    saveKeywordsToDatabase(previousSearch);
+                    displayLastSearchesDropdown();
+                }
+            });
+
+            function displayLastSearchesDropdown(type = "6") {
+                $.ajax({
+                    url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/save-history/search-keywords?type=${type}`,
+                    type: 'GET',
+                    success: function (data) {
+
+                        var dropdownList = $('#lastSearchesDropdown');
+                        dropdownList.empty();
+
+                        data.forEach(function (search) {
+                            var listItem = $('<li>').addClass('dropdown-item').text(search);
+                            listItem.on('click', function () {
+                                $('#productlist_filter input').val(search).trigger('input');
+                            });
+                            dropdownList.append(listItem);
+
+                            $('#productlist_filter input').val('')
+                            table.search('').draw();
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error fetching last searches:', error);
+                    }
+                });
+            }
+
+            displayLastSearchesDropdown();
+
+        });
+
+        function viewProduct(productId) {
+
+            $.ajax({
+                url: `/webAdmin/product/view-product/${productId}`,
+                type: "GET",
+                data: { action: 0 },
+            }).then((productData) => {
+
+                let imageContainer = document.getElementById('imageContainer');
+                imageContainer.innerHTML = "";
+                for (let i = 0; i < productData.img.length; i++) {
+                    console.log(i);
+                    var img = document.createElement('img');
+                    img.src = `<%= process.env.APP_URL_ADMIN %>/${productData.img[i].image}`;
+                    img.style.height = '100px';
+                    img.style.width = '100px';
+                    img.style.marginRight = '10px';
+                    img.style.marginLeft = '14px';
+                    imageContainer.appendChild(img);
+                }
+
+                function updateElement(data, field, elementClass) {
+                    let element = document.querySelector('.' + elementClass);
+                    let classList = element ? element.classList : null
+                    if (classList)
+                        classList.remove("d-flex", "d-none")
+
+                    if (data !== null) {
+                        if (classList)
+                            classList.add("d-flex")
+                        document.getElementById(field).innerHTML = `${data}`;
+                    } else {
+                        if (classList)
+                            classList.add("d-none")
+                    }
+                }
+
+                updateElement(productData.product.productName, 'productName', 'productName');
+                updateElement(productData.product.description, 'description', 'description');
+                updateElement(productData.product.brand, 'brand', 'brand');
+                updateElement(productData.product.model, 'model', 'model');
+                updateElement(productData.product.price, 'price', 'price');
+                updateElement(productData.product.screenSize, 'screenSize', 'screenSize');
+                updateElement(productData.product.screenType, 'screenType', 'screenType');
+                updateElement(productData.product.resolution, 'resolution', 'resolution');
+                updateElement(productData.product.smartTv, 'smartTv', 'smartTv');
+                updateElement(productData.product.hdr, 'hdr', 'hdr');
+                updateElement(productData.product.condition, 'condition', 'condition');
+                updateElement(productData.product.color, 'color', 'color');
+                updateElement(productData.product.connectivity, 'connectivity', 'connectivity');
+                updateElement(productData.product.earCoupling, 'earCoupling', 'earCoupling');
+                updateElement(productData.product.mountType, 'mountType', 'mountType');
+                updateElement(productData.product.vesaCompatibility, 'vesaCompatibility', 'vesaCompatibility');
+                updateElement(productData.product.weightCapacity, 'weightCapacity', 'weightCapacity');
+                updateElement(productData.product.screenSizeRange, 'screenSizeRange', 'screenSizeRange');
+                updateElement(productData.product.length, 'length', 'length');
+                updateElement(productData.product.hdmiVersion, 'hdmiVersion', 'hdmiVersion');
+                updateElement(productData.product.remoteCompatibility, 'remoteCompatibility', 'remoteCompatibility');
+                updateElement(productData.product.type, 'type', 'type');
+                updateElement(productData.product.formFactor, 'formFactor', 'formFactor');
+                updateElement(productData.product.processor, 'processor', 'processor');
+                updateElement(productData.product.ram, 'ram', 'ram');
+                updateElement(productData.product.storage, 'storage', 'storage');
+                updateElement(productData.product.graphicsCard, 'graphicsCard', 'graphicsCard');
+                updateElement(productData.product.operatingSystem, 'operatingSystem', 'operatingSystem');
+                updateElement(productData.product.displayResolution, 'displayResolution', 'displayResolution');
+                updateElement(productData.product.displaySize, 'displaySize', 'displaySize');
+                updateElement(productData.product.displayRefreshRate, 'displayRefreshRate', 'displayRefreshRate');
+                updateElement(productData.product.switchType, 'switchType', 'switchType');
+                updateElement(productData.product.layout, 'layout', 'layout');
+                updateElement(productData.product.sensorType, 'sensorType', 'sensorType');
+                updateElement(productData.product.maxDpi, 'maxDpi', 'maxDpi');
+                updateElement(productData.product.numberOfButtons, 'numberOfButtons', 'numberOfButtons');
+                updateElement(productData.product.headedness, 'headedness', 'headedness');
+                updateElement(productData.product.material, 'material', 'material');
+                updateElement(productData.product.bagType, 'bagType', 'bagType');
+                updateElement(productData.product.fitsLaptopSize, 'fitsLaptopSize', 'fitsLaptopSize');
+                updateElement(productData.product.storageCapacity, 'storageCapacity', 'storageCapacity');
+                updateElement(productData.product.driveType, 'driveType', 'driveType');
+                updateElement(productData.product.interface, 'interface', 'interface');
+                updateElement(productData.product.networkCompatibility, 'networkCompatibility', 'networkCompatibility');
+                updateElement(productData.product.carrier, 'carrier', 'carrier');
+                updateElement(productData.product.displayType, 'displayType', 'displayType');
+                updateElement(productData.product.cameraDetails, 'cameraDetails', 'cameraDetails');
+                updateElement(productData.product.compatibility, 'compatibility', 'compatibility');
+                updateElement(productData.product.bandStyle, 'bandStyle', 'bandStyle');
+                updateElement(productData.product.caseType, 'caseType', 'caseType');
+                updateElement(productData.product.chargerType, 'chargerType', 'chargerType');
+                updateElement(productData.product.outputPower, 'outputPower', 'outputPower');
+                updateElement(productData.product.connectorType, 'connectorType', 'connectorType');
+                updateElement(productData.product.compatibleDevices, 'compatibleDevices', 'compatibleDevices');
+                updateElement(productData.product.accessories, 'accessories', 'accessories');
+                updateElement(productData.product.discEdition, 'discEdition', 'discEdition');
+                updateElement(productData.product.consoleGeneration, 'consoleGeneration', 'consoleGeneration');
+                updateElement(productData.product.consoleModel, 'consoleModel', 'consoleModel');
+                updateElement(productData.product.compatiblePlatforms, 'compatiblePlatforms', 'compatiblePlatforms');
+                updateElement(productData.product.connectionType, 'connectionType', 'connectionType');
+                updateElement(productData.product.size, 'size', 'size');
+                updateElement(productData.product.gripStyle, 'gripStyle', 'gripStyle');
+                updateElement(productData.product.weight, 'weight', 'weight');
+                updateElement(productData.product.platformCompatibility, 'platformCompatibility', 'platformCompatibility');
+                updateElement(productData.product.audioType, 'audioType', 'audioType');
+                updateElement(productData.product.refrigeratorType, 'refrigeratorType', 'refrigeratorType');
+                updateElement(productData.product.totalCapacity, 'totalCapacity', 'totalCapacity');
+                updateElement(productData.product.washerType, 'washerType', 'washerType');
+                updateElement(productData.product.capacity, 'capacity', 'capacity');
+                updateElement(productData.product.acType, 'acType', 'acType');
+                updateElement(productData.product.coolingCapacity, 'coolingCapacity', 'coolingCapacity');
+                updateElement(productData.product.vacuumType, 'vacuumType', 'vacuumType');
+                updateElement(productData.product.cordedCordless, 'cordedCordless', 'cordedCordless');
+                updateElement(productData.product.sliceCapacity, 'sliceCapacity', 'sliceCapacity');
+                updateElement(productData.product.blenderType, 'blenderType', 'blenderType');
+                updateElement(productData.product.jarCapacity, 'jarCapacity', 'jarCapacity');
+                updateElement(productData.product.power, 'power', 'power');
+                updateElement(productData.product.coffeeType, 'coffeeType', 'coffeeType');
+                updateElement(productData.product.hvacSystemCompatibility, 'hvacSystemCompatibility', 'hvacSystemCompatibility');
+                updateElement(productData.product.deviceType, 'deviceType', 'deviceType');
+                updateElement(productData.product.videoResolution, 'videoResolution', 'videoResolution');
+                updateElement(productData.product.suitableFor, 'suitableFor', 'suitableFor');
+                updateElement(productData.product.lockType, 'lockType', 'lockType');
+                updateElement(productData.product.lightingType, 'lightingType', 'lightingType');
+                updateElement(productData.product.shaverType, 'shaverType', 'shaverType');
+                updateElement(productData.product.wattage, 'wattage', 'wattage');
+                updateElement(productData.product.hairDryerType, 'hairDryerType', 'hairDryerType');
+                updateElement(productData.product.primaryUseCases, 'primaryUseCases', 'primaryUseCases');
+                updateElement(productData.product.compatibleWith, 'compatibleWith', 'compatibleWith');
+                updateElement(productData.product.monitorType, 'monitorType', 'monitorType');
+                updateElement(productData.product.display, 'display', 'display');
+                updateElement(productData.product.wearStyle, 'wearStyle', 'wearStyle');
+                updateElement(productData.product.sleepTracking, 'sleepTracking', 'sleepTracking');
+                updateElement(productData.product.measurements, 'measurements', 'measurements');
+                updateElement(productData.product.compatibleApps, 'compatibleApps', 'compatibleApps');
+                updateElement(productData.product.maxVideoResolution, 'maxVideoResolution', 'maxVideoResolution');
+                updateElement(productData.product.cameraType, 'cameraType', 'cameraType');
+                updateElement(productData.product.sensorSize, 'sensorSize', 'sensorSize');
+                updateElement(productData.product.megaPixels, 'megaPixels', 'megaPixels');
+                updateElement(productData.product.lensMount, 'lensMount', 'lensMount');
+                updateElement(productData.product.lensType, 'lensType', 'lensType');
+                updateElement(productData.product.includedLenses, 'includedLenses', 'includedLenses');
+                updateElement(productData.product.bagType, 'bagType', 'bagType');
+                updateElement(productData.product.primaryMaterial, 'primaryMaterial', 'primaryMaterial');
+                updateElement(productData.product.focalLength, 'focalLength', 'focalLength');
+                updateElement(productData.product.maximumAperture, 'maximumAperture', 'maximumAperture');
+                updateElement(productData.product.tripodType, 'tripodType', 'tripodType');
+                updateElement(productData.product.maximumHeight, 'maximumHeight', 'maximumHeight');
+                updateElement(productData.product.foldedLength, 'foldedLength', 'foldedLength');
+                updateElement(productData.product.loadCapacity, 'loadCapacity', 'loadCapacity');
+                updateElement(productData.product.headType, 'headType', 'headType');
+                updateElement(productData.product.warrantyStatus, 'warrantyStatus', 'warrantyStatus');
+                updateElement(productData.product.additionalFeatures, 'additionalFeatures', 'additionalFeatures');
+            });
+        }
+
+        function deleteProduct(productId) {
+
+            Swal.fire({
+                title: 'Are you sure you want to delete this product ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it !!'
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/product/delete-product/${productId}`,
+                        type: 'DELETE',
+                        success: function () {
+                            Swal.fire(
+                                'Deleted!',
+                                'User deleted successfully',
+                                'success'
+                            ).then(() => {
+                                // window.location.reload()
+                                $("#productlist").DataTable().ajax.reload();
+                            })
+
+                        }
+                    });
+                }
+
+            }).catch(err => console.log(err))
+        }
+
+    </script>
+
+    <%- include("../layouts/footer.ejs") %>

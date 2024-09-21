@@ -1,0 +1,287 @@
+<%- include("../layouts/header.ejs") %>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css">
+    <style>
+        .iti {
+            width: 100%;
+        }
+
+        .alert-danger {
+            background: #e52828;
+            border-color: #e52828;
+            color: #ffffff;
+        }
+
+        h4 a {
+            color: #000000;
+        }
+
+        h4 a:hover {
+            color: #000;
+            text-decoration: none;
+        }
+
+
+        .button {
+            position: relative;
+            padding: 8px 16px;
+            background: #000;
+            color: #fff;
+            border: none;
+            outline: none;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .button:active {
+            background: #80DEE4;
+        }
+
+        .button__text {
+            transition: all 0.2s;
+        }
+
+        .button--loading .button__text {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .button--loading::after {
+            content: "";
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            border: 4px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: button-loading-spinner 1s ease infinite;
+        }
+
+        .iti {
+            width: 100%;
+        }
+
+        .form-control {
+            border-radius: 0;
+            box-shadow: none;
+            height: 30px;
+            min-height: 35px;
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            margin-left: 9px;
+        }
+    </style>
+
+    <div class="container-fluid">
+        <!-- row -->
+        <div class="row">
+            <div class="col-xl-6 col-xxl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title" style="display: flex; align-items: center; justify-content: left;"><a
+                                href="/webAdmin/admin/admin-page"> <i class="fa fa-long-arrow-left"
+                                    style="font-size: 26px; margin-right: 10px;"></i></a>Update Admin</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="admin" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="updateId" value="<%= admin._id %>" class="form-control">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label>Full Name :</label>
+                                    <input type="text" name="fullName" value="<%= admin.fullName %>"
+                                        class="form-control firstLatterCapital" placeholder="FullName">
+                                </div>
+                                <br>
+                                <div class="form-group col-md-12">
+                                    <label>Email :</label>
+                                    <input type="email" name="email" class="form-control" placeholder="Email"
+                                        value="<%= admin.email %>" oninput="this.value=this.value.toLowerCase()">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Password :</label>
+                                    <div class="input-group">
+                                        <input type="password" name="password" id="password" class="form-control"
+                                            placeholder="Password">
+                                        <div class="input-group-append">
+                                            <button type="button" id="togglePassword" class="btn btn-dark"
+                                                onclick="togglePasswordVisibility()">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Profile Image :</label>
+                                    <input type="file" name="image" class="form-control">
+                                    <img src="<%= process.env.APP_URL_ADMIN %>/<%= admin.image %>" alt=""
+                                        style="margin-top: 13px;" height="80">
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <label>Assign Tasks :</label>
+                                    <div class="form-check">
+                                        <input type="checkbox" name="assignRoles" value="Product Manager"
+                                            class="form-check-input" <%=admin.assignRoles.includes("Product Manager")
+                                            ? 'checked' : '' %>>
+                                        <label class="form-check-label">Product Manager</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" name="assignRoles" value="Acquisition Manager"
+                                            class="form-check-input" <%=admin.assignRoles.includes("Acquisition Manager") ? 'checked'
+                                            : '' %>>
+                                        <label class="form-check-label">Acquisition Manager</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" name="assignRoles" value="Order Manager"
+                                            class="form-check-input" <%=admin.assignRoles.includes("Order Manager")
+                                            ? 'checked' : '' %>>
+                                        <label class="form-check-label">Order Manager</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" name="assignRoles" value="Customer Support Specialist"
+                                            class="form-check-input" <%=admin.assignRoles.includes("Customer Support Specialist")
+                                            ? 'checked' : '' %>>
+                                        <label class="form-check-label">Customer Support Specialist</label>
+                                    </div>
+                                </div>
+                                <button type="submit" id="submit_btn" class="btn btn-dark">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js'></script>
+
+    <script>
+
+        $("#success").show().delay(5000).fadeOut();
+        $("#error").show().delay(5000).fadeOut();
+
+        $(document).ready(function () {
+
+            const phoneInputs = document.querySelectorAll('.mobile_code');
+            phoneInputs.forEach(phoneInput => {
+                phoneInput.addEventListener('input', function () {
+                    const phoneNumber = phoneInput.value;
+                    const formattedNumber = formatPhoneNumber(phoneNumber);
+                    phoneInput.value = formattedNumber;
+                });
+            });
+
+            $('.firstLatterCapital').keyup(function (event) {
+                var textBox = event.target;
+                var start = textBox.selectionStart;
+                var end = textBox.selectionEnd;
+
+                textBox.value = textBox.value.toLowerCase().replace(/(?:^|\s)\w/g, function (match) {
+                    return match.toUpperCase();
+                });
+
+                textBox.setSelectionRange(start, end);
+            });
+
+
+            jQuery.validator.addMethod("noSpace", function (value, element) {
+                return value == '' || value.trim().length != 0;
+            }, "No space please and don't leave it empty");
+
+            $.validator.addMethod("imageExtension", function (value, element) {
+                var allowedExtensions = ["jpg", "jpeg", "png", "svg"];
+                var fileExtension = value.split('.').pop().toLowerCase();
+                return $.inArray(fileExtension, allowedExtensions) !== -1;
+            }, "Please select a valid image file (JPG, JPEG, PNG,SVG)");
+
+            jQuery.validator.addMethod("emailordomain", function (value, element) {
+                return this.optional(element) || /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(value) || /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/.test(value);
+            }, "Please enter a valid email address.");
+
+            $("#admin").validate({
+                rules: {
+                    fullName: {
+                        required: true,
+                        noSpace: true
+                    },
+                    email: {
+                        required: true,
+                        email: true,
+                        emailordomain: true,
+                        noSpace: true
+                    },
+                    assignTasks: {
+                        required: true
+                    }
+                },
+                messages: {
+                    fullName: {
+                        required: "Full Name is required."
+                    },
+                    email: {
+                        required: "Email is required."
+                    },
+                    assignTasks: {
+                        required: "At least one task is required."
+                    }
+                },
+                errorElement: 'span',
+                errorPlacement: function (error, element) {
+                    error.addClass('invalid-feedback');
+                    element.closest('.form-group').append(error);
+                },
+                highlight: function (element, errorClass, validClass) {
+                    $(element).addClass('is-invalid').removeClass(validClass);
+                },
+                unhighlight: function (element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid').addClass(validClass);
+                },
+                submitHandler: function (form) {
+                    const updateId = $("input[name='updateId']").val();
+                    $('#submit_btn').addClass('button--loading');
+                    document.getElementById("submit_btn").disabled = true;
+
+                    var formData = new FormData(form);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/admin/updateAdminPage/${updateId}`,
+                        data: formData,
+                        success: function (response) {
+                            window.location.href = '<%= process.env.APP_URL_ADMIN %>/webAdmin/admin/admin-page';
+                        },
+                        error: function (error) {
+                            console.log(error);
+                        }
+                    });
+                }
+            })
+        })
+
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById('password');
+            var toggleButton = document.getElementById('togglePassword');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.innerHTML = '<i class="fa fa-eye-slash"></i>';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.innerHTML = '<i class="fa fa-eye"></i>';
+            }
+        }
+
+    </script>
+
+    <%- include("../layouts/footer.ejs") %>

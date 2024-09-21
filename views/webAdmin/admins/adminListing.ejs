@@ -1,0 +1,217 @@
+<%- include("../layouts/header.ejs") %>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Manage Admins</h4>
+                        <div style=" display: flex; justify-content: space-between;">
+                            <a href="/webAdmin/admin/add-admin" type="button" class="btn btn-dark"
+                                style="margin-bottom: 8px;"> Add Admin</a>
+                            <!-- Add the dropdown for last searches -->
+                            <div class="dropdown text-end mt-2">
+                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                    id="lastSearchesDropdownButton" data-bs-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    Last Searches
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="lastSearchesDropdownButton">
+                                    <ul id="lastSearchesDropdown" class="list-unstyled">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="adminList" class="table table-striped table-bordered zero-configuration"
+                                style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Full Name</th>
+                                        <th>Email</th>
+                                        <th>Assign Roles</th>
+                                        <th>Profile</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        jQuery(document).ready(function () {
+            var table = $('#adminList').DataTable({
+                paging: true,
+                responsive: true,
+                searching: true,
+                processing: true,
+                serverSide: true,
+                ordering: false,
+                language: {
+                    oPaginate: {
+                        sNext: '<i class="fa fa-forward"></i>',
+                        sPrevious: '<i class="fa fa-backward"></i>',
+                        sFirst: '<i class="fa fa-step-backward"></i>',
+                        sLast: '<i class="fa fa-step-forward"></i>'
+                    }
+                },
+                ajax: {
+                    url: "<%= process.env.APP_URL_ADMIN %>/webAdmin/admin/admin-list",
+                    type: "GET",
+                },
+                columns: [
+                    {
+                        "data": "id",
+                        "render": function (data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        "data": "fullName",
+                        "render": function (data, type, row, meta) {
+                            return row.fullName
+                        },
+                        "width": "25%"
+                    },
+                    {
+                        "data": "email",
+                        "render": function (data, type, row, meta) {
+                            return row.email
+                        }
+                    },
+                    {
+                        "data": "assignRoles",
+                        "render": function (data, type, row, meta) {
+                            return row.assignRoles.map(task => {
+                                return `<div style="width: 200px;"> &#x2022; ${task} </div></br>`
+                            }).join(" ")
+                        }
+                    },
+                    {
+                        "data": "image",
+                        "render": function (data) {
+                            return data === null ? `<img src="${'<%= process.env.APP_URL_ADMIN %>'}/adminWeb/img/profile-image/profile.png" height="80px" width="80px" border-radius: 10px/>` : `<img src="${'<%= process.env.APP_URL_ADMIN %>'}/${data}" style="height: 80px; width: 80px; border-radius: 10px;"/>`
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function (data, type, row) {
+                            return `<a href="/webAdmin/admin/updateAdminPage/${data._id}" class="btn btn-primary shadow btn-xs sharp me-1" ><i class="fa fa-pencil"></i></a>` +
+                                `<a class="btn btn-danger shadow btn-xs sharp" onclick="deleteAdmin('${data._id}')" ><i class="fa fa-trash"></i></a>`
+                        }
+                    },
+                ],
+            });
+
+            function saveKeywordsToDatabase(keyword, type = "3") {
+                $.ajax({
+                    url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/save-history/save?saveAdminsKeywords=${keyword}&type=${type}`,
+                    type: 'POST',
+                    data: { saveAdminsKeywords: keyword },
+                    success: function (data) {
+                        console.log('Search keyword saved successfully:', keyword);
+                    },
+                    error: function (error) {
+                        console.error('Error saving search keyword:', error);
+                    }
+                });
+            }
+
+            var currentSearch = '';
+
+            $('#adminList_filter input').on('input', function () {
+                var previousSearch = currentSearch;
+
+                currentSearch = $(this).val().trim();
+
+                if (previousSearch && !currentSearch) {
+                    saveKeywordsToDatabase(previousSearch);
+                    displayLastSearchesDropdown();
+                }
+            });
+
+
+            function displayLastSearchesDropdown(type = "3") {
+                console.log("1212");
+                $.ajax({
+                    url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/save-history/search-keywords?type=${type}`,
+                    type: 'GET',
+                    success: function (data) {
+
+                        var dropdownList = $('#lastSearchesDropdown');
+                        dropdownList.empty();
+
+                        data.forEach(function (search) {
+                            var listItem = $('<li>').addClass('dropdown-item').text(search);
+                            listItem.on('click', function () {
+                                $('#adminList_filter input').val(search).trigger('input');
+                            });
+                            dropdownList.append(listItem);
+
+                            $('#adminList_filter input').val('')
+                            table.search('').draw();
+                        });
+                    },
+                    error: function (error) {
+                        console.error('Error fetching last searches:', error);
+                    }
+                });
+            }
+
+            displayLastSearchesDropdown();
+
+
+        });
+
+        function deleteAdmin(adminId) {
+
+            // ev.preventDefault();
+            // var id = ev.currentTarget.getAttribute('href');
+
+            Swal.fire({
+                title: 'Are you sure you want to delete this admin ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it !!'
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/admin/delete-admin/${adminId}`,
+                        type: 'DELETE',
+                        success: function () {
+                            Swal.fire(
+                                'Deleted!',
+                                'Admin deleted successfully',
+                                'success'
+                            ).then(() => {
+                                // window.location.reload()
+                                $("#adminList").DataTable().ajax.reload();
+                            })
+
+                        }
+                    });
+                }
+
+            }).catch(err => console.log(err))
+        }
+
+    </script>
+
+    <%- include("../layouts/footer.ejs") %>

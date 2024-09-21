@@ -1,0 +1,1861 @@
+<%- include("../layouts/header.ejs") %>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-date-range-picker/0.21.1/daterangepicker.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-date-range-picker/0.21.1/daterangepicker.min.css"
+/>
+<style>
+  .iti {
+    width: 100%;
+  }
+
+  .form-select {
+    display: block;
+    width: 110px;
+    padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+    -moz-padding-start: calc(0.75rem - 3px);
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  table.dataTable.dtr-inline.collapsed > tbody > tr > td {
+    white-space: nowrap;
+  }
+
+  table.dataTable tbody td {
+    white-space: nowrap;
+  }
+
+  table.dataTable thead tr {
+    white-space: nowrap;
+  }
+
+  .dataTables_scroll {
+    padding: 0.5rem 0;
+  }
+
+  .wrapped-content {
+    overflow: hidden;
+    width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  .wrapped-content:hover {
+    -webkit-line-clamp: initial;
+  }
+
+  #quickSellList {
+    width: 100% !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .form-select {
+      transition: none;
+    }
+  }
+
+  #dataContainer p {
+    margin-bottom: 0 !important;
+    align-items: center;
+    display: flex;
+    padding: 10px 15px !important;
+    color: #000;
+    word-break: break-word;
+  }
+
+  #dataContainer span {
+    display: flex !important;
+    align-items: center;
+    padding: 10px 15px !important;
+    color: #000;
+    background-color: #d9d9d9;
+  }
+
+  .table-border-bottom {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .input-daterange-datepicker {
+    padding: 0 5px !important;
+    font-size: 13px;
+    height: 5px !important;
+    text-align: center;
+    width: 174px;
+  }
+
+  .small-dropdown {
+    width: 120px;
+  }
+
+  .custom-swal-popup {
+    width: 400px;
+    max-width: 100%;
+  }
+
+  .custom-swal-validation-message {
+    display: block;
+    width: calc(100% - 2em);
+    box-sizing: border-box;
+    margin: 0 auto;
+    color: red;
+    font-size: 14px;
+    padding: 10px;
+    text-align: center;
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Quick Sell Items</h4>
+          <div
+            class="col-12 d-flex align-items-center p-0 justify-content-between"
+          >
+            <div class="example">
+              <input
+                class="form-control input-daterange-datepicker"
+                id="dateRangePicker"
+                type="text"
+                name="daterange"
+                value="01-01-2024 - 01-02-2024"
+              />
+            </div>
+            <div class="dropdown text-end ms-2">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                id="lastSearchesDropdownButton"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Last Searches
+              </button>
+              <div
+                class="dropdown-menu"
+                aria-labelledby="lastSearchesDropdownButton"
+              >
+                <ul id="lastSearchesDropdown" class="list-unstyled"></ul>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table
+              id="quickSellList"
+              class="table table-striped table-bordered zero-configuration"
+            >
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Customer ID</th>
+                  <th>Order ID</th>
+                  <th>Order Date</th>
+                  <th>Pickup Address</th>
+                  <th>Quick Sell Items</th>
+                  <th>Price</th>
+                  <th>Items Status</th>
+                  <th>Status</th>
+                  <th>Send</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- model demo  -->
+  <div
+    class="modal fade"
+    id="exampleModals"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    data-bs-backdrop="static"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1
+            class="modal-title fs-5"
+            style="color: #000; margin-left: 14px"
+            id="productName"
+          ></h1>
+          <i
+            id="closeModalBtn"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            class="fa fa-times"
+            style="font-size: 22px; color: #000; cursor: pointer"
+            aria-hidden="true"
+          ></i>
+        </div>
+        <div class="modal-body">
+          <div class="hh">
+            <div id="imageContainer">&nbsp;</div>
+            <br />
+            <br />
+            <div id="dataContainer">
+              <div class="d-flex table-border-bottom brand">
+                <span class="field-none col-4">Brand</span>
+                <p id="brand"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherBrand">
+                <span class="d-inline-block col-4">Other Brand</span>
+                <p id="otherBrand"></p>
+              </div>
+              <div class="d-flex table-border-bottom model">
+                <span class="d-inline-block col-4">Model</span>
+                <p id="model"></p>
+              </div>
+              <div class="d-flex table-border-bottom conditions">
+                <span class="d-inline-block col-4">Condition</span>
+                <p id="conditions"></p>
+              </div>
+              <div class="d-flex table-border-bottom price">
+                <span class="d-inline-block col-4">Price</span>
+                <p id="price"></p>
+              </div>
+              <div class="d-flex table-border-bottom priceFlexibility">
+                <span class="d-inline-block col-4">Price Flexibility</span>
+                <p id="priceFlexibility"></p>
+              </div>
+              <div class="d-flex table-border-bottom warrantyStatus">
+                <span class="d-inline-block col-4">Warranty Status</span>
+                <p id="warrantyStatus"></p>
+              </div>
+              <div class="d-flex table-border-bottom additionalDetails">
+                <span class="d-inline-block col-4">Additional Details</span>
+                <p id="additionalDetails"></p>
+              </div>
+              <div class="d-flex table-border-bottom features">
+                <span class="d-inline-block col-4">Features</span>
+                <p id="features"></p>
+              </div>
+              <div class="d-flex table-border-bottom connectivityFeatures">
+                <span class="d-inline-block col-4">Connectivity Features</span>
+                <p id="connectivityFeatures"></p>
+              </div>
+              <div class="d-flex table-border-bottom smartTvFeatures">
+                <span class="d-inline-block col-4">Smart TV Features</span>
+                <p id="smartTvFeatures"></p>
+              </div>
+              <div class="d-flex table-border-bottom coolingCapacity">
+                <span class="d-inline-block col-4">Cooling Capacity</span>
+                <p id="coolingCapacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom energyEfficiency">
+                <span class="d-inline-block col-4">Energy Efficiency</span>
+                <p id="energyEfficiency"></p>
+              </div>
+              <div class="d-flex table-border-bottom screenSize">
+                <span class="d-inline-block col-4">Screen Size</span>
+                <p id="screenSize"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherScreenSize">
+                <span class="d-inline-block col-4">Other Screen Size</span>
+                <p id="otherScreenSize"></p>
+              </div>
+              <div class="d-flex table-border-bottom storage">
+                <span class="d-inline-block col-4">Storage</span>
+                <p id="storage"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherStorage">
+                <span class="d-inline-block col-4">Other Storage</span>
+                <p id="otherStorage"></p>
+              </div>
+              <div class="d-flex table-border-bottom ram">
+                <span class="d-inline-block col-4">RAM</span>
+                <p id="ram"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherRam">
+                <span class="d-inline-block col-4">Other RAM</span>
+                <p id="otherRam"></p>
+              </div>
+              <div class="d-flex table-border-bottom batteryLife">
+                <span class="d-inline-block col-4">Battery Life</span>
+                <p id="batteryLife"></p>
+              </div>
+              <div class="d-flex table-border-bottom type">
+                <span class="d-inline-block col-4">Type</span>
+                <p id="type"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherType">
+                <span class="d-inline-block col-4">Other Type</span>
+                <p id="otherType"></p>
+              </div>
+              <div class="d-flex table-border-bottom color">
+                <span class="d-inline-block col-4">Color</span>
+                <p id="color"></p>
+              </div>
+              <div class="d-flex table-border-bottom blenderCapacity">
+                <span class="d-inline-block col-4">Blender Capacity</span>
+                <p id="blenderCapacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom compatibility">
+                <span class="d-inline-block col-4">Compatibility</span>
+                <p id="compatibility"></p>
+              </div>
+              <div class="d-flex table-border-bottom displayType">
+                <span class="d-inline-block col-4">Display Type</span>
+                <p id="displayType"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherDisplayType">
+                <span class="d-inline-block col-4">Other Display Type</span>
+                <p id="otherDisplayType"></p>
+              </div>
+              <div class="d-flex table-border-bottom cuffSize">
+                <span class="d-inline-block col-4">Cuff Size</span>
+                <p id="cuffSize"></p>
+              </div>
+              <div class="d-flex table-border-bottom powerSource">
+                <span class="d-inline-block col-4">Power Source</span>
+                <p id="powerSource"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherPowerSource">
+                <span class="d-inline-block col-4">Other Power Source</span>
+                <p id="otherPowerSource"></p>
+              </div>
+              <div class="d-flex table-border-bottom feature">
+                <span class="d-inline-block col-4">Feature</span>
+                <p id="feature"></p>
+              </div>
+              <div class="d-flex table-border-bottom material">
+                <span class="d-inline-block col-4">Material</span>
+                <p id="material"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherMaterial">
+                <span class="d-inline-block col-4">Other Material</span>
+                <p id="otherMaterial"></p>
+              </div>
+              <div class="d-flex table-border-bottom size">
+                <span class="d-inline-block col-4">Size</span>
+                <p id="size"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherSize">
+                <span class="d-inline-block col-4">Other Size</span>
+                <p id="otherSize"></p>
+              </div>
+              <div class="d-flex table-border-bottom focalLength">
+                <span class="d-inline-block col-4">Focal Length</span>
+                <p id="focalLength"></p>
+              </div>
+              <div class="d-flex table-border-bottom aperture">
+                <span class="d-inline-block col-4">Aperture</span>
+                <p id="aperture"></p>
+              </div>
+              <div class="d-flex table-border-bottom maxLoadCapacity">
+                <span class="d-inline-block col-4">Max Load Capacity</span>
+                <p id="maxLoadCapacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom megapixels">
+                <span class="d-inline-block col-4">Mega Pixels</span>
+                <p id="megapixels"></p>
+              </div>
+              <div class="d-flex table-border-bottom sensorSize">
+                <span class="d-inline-block col-4">Sensor Size</span>
+                <p id="sensorSize"></p>
+              </div>
+              <div class="d-flex table-border-bottom lensMount">
+                <span class="d-inline-block col-4">Lens Mount</span>
+                <p id="lensMount"></p>
+              </div>
+              <div class="d-flex table-border-bottom compatibleBrand">
+                <span class="d-inline-block col-4">Compatible Brand</span>
+                <p id="compatibleBrand"></p>
+              </div>
+              <div class="d-flex table-border-bottom connectorType">
+                <span class="d-inline-block col-4">Connector Type</span>
+                <p id="connectorType"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherConnectorType">
+                <span class="d-inline-block col-4">Other Connector Type</span>
+                <p id="otherConnectorType"></p>
+              </div>
+              <div class="d-flex table-border-bottom outputSpecification">
+                <span class="d-inline-block col-4">Output Specification</span>
+                <p id="outputSpecification"></p>
+              </div>
+              <div class="d-flex table-border-bottom processor">
+                <span class="d-inline-block col-4">Processor</span>
+                <p id="processor"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherProcessor">
+                <span class="d-inline-block col-4">Other Processor</span>
+                <p id="otherProcessor"></p>
+              </div>
+              <div class="d-flex table-border-bottom graphicsCard">
+                <span class="d-inline-block col-4">Graphics Card</span>
+                <p id="graphicsCard"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherGraphicsCard">
+                <span class="d-inline-block col-4">Other Graphics Card</span>
+                <p id="otherGraphicsCard"></p>
+              </div>
+              <div class="d-flex table-border-bottom operatingSystem">
+                <span class="d-inline-block col-4">Operating System</span>
+                <p id="operatingSystem"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherOperatingSystem">
+                <span class="d-inline-block col-4">Other Operating System</span>
+                <p id="otherOperatingSystem"></p>
+              </div>
+              <div class="d-flex table-border-bottom memoryCapacity">
+                <span class="d-inline-block col-4">Memory Capacity</span>
+                <p id="memoryCapacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom recordingQuality">
+                <span class="d-inline-block col-4">Recording Quality</span>
+                <p id="recordingQuality"></p>
+              </div>
+              <div class="d-flex table-border-bottom additionalFeatures">
+                <span class="d-inline-block col-4">Additional Features</span>
+                <p id="additionalFeatures"></p>
+              </div>
+              <div class="d-flex table-border-bottom capacity">
+                <span class="d-inline-block col-4">Capacity</span>
+                <p id="capacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherCapacity">
+                <span class="d-inline-block col-4">Other Capacity</span>
+                <p id="otherCapacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom connectionType">
+                <span class="d-inline-block col-4">Connection Type</span>
+                <p id="connectionType"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherConnectionType">
+                <span class="d-inline-block col-4">Other Connection Type</span>
+                <p id="otherConnectionType"></p>
+              </div>
+              <div class="d-flex table-border-bottom formFactor">
+                <span class="d-inline-block col-4">Form Factor</span>
+                <p id="formFactor"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherFormFactor">
+                <span class="d-inline-block col-4">Other Form Factor</span>
+                <p id="otherFormFactor"></p>
+              </div>
+              <div class="d-flex table-border-bottom recommendedSkinType">
+                <span class="d-inline-block col-4">Recommended Skin Type</span>
+                <p id="recommendedSkinType"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherRecommendedSkinType">
+                <span class="d-inline-block col-4"
+                  >Other Recommended Skin Type</span
+                >
+                <p id="otherRecommendedSkinType"></p>
+              </div>
+              <div class="d-flex table-border-bottom cleaningBrushType">
+                <span class="d-inline-block col-4">Cleaning Brush Type</span>
+                <p id="cleaningBrushType"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherCleaningBrushType">
+                <span class="d-inline-block col-4"
+                  >Other Cleaning Brush Type</span
+                >
+                <p id="otherCleaningBrushType"></p>
+              </div>
+              <div class="d-flex table-border-bottom waterResistance">
+                <span class="d-inline-block col-4">Other Water Resistance</span>
+                <p id="waterResistance"></p>
+              </div>
+              <div class="d-flex table-border-bottom chargingType">
+                <span class="d-inline-block col-4">Charging Type</span>
+                <p id="chargingType"></p>
+              </div>
+              <div class="d-flex table-border-bottom activityTracking">
+                <span class="d-inline-block col-4">Activity Tracking</span>
+                <p id="activityTracking"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherActivityTracking">
+                <span class="d-inline-block col-4"
+                  >Other Activity Tracking</span
+                >
+                <p id="otherActivityTracking"></p>
+              </div>
+              <div class="d-flex table-border-bottom resolution">
+                <span class="d-inline-block col-4">Resolution</span>
+                <p id="resolution"></p>
+              </div>
+              <div class="d-flex table-border-bottom storageCapacity">
+                <span class="d-inline-block col-4">Storage Capacity</span>
+                <p id="storageCapacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherStorageCapacity">
+                <span class="d-inline-block col-4">Other Storage Capacity</span>
+                <p id="otherStorageCapacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom includedAccessories">
+                <span class="d-inline-block col-4">Included Accessories</span>
+                <p id="includedAccessories"></p>
+              </div>
+              <div class="d-flex table-border-bottom compatiblePlatform">
+                <span class="d-inline-block col-4">Compatible Platform</span>
+                <p id="compatiblePlatform"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherCompatiblePlatform">
+                <span class="d-inline-block col-4"
+                  >Other Compatible Platform</span
+                >
+                <p id="otherCompatiblePlatform"></p>
+              </div>
+              <div class="d-flex table-border-bottom switchType">
+                <span class="d-inline-block col-4">Switch Type</span>
+                <p id="switchType"></p>
+              </div>
+              <div class="d-flex table-border-bottom backlighting">
+                <span class="d-inline-block col-4">Back Lighting</span>
+                <p id="backlighting"></p>
+              </div>
+              <div class="d-flex table-border-bottom keyFeatures">
+                <span class="d-inline-block col-4">Key Features</span>
+                <p id="keyFeatures"></p>
+              </div>
+              <div class="d-flex table-border-bottom refreshRate">
+                <span class="d-inline-block col-4">Refresh Rate</span>
+                <p id="refreshRate"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherRefreshRate">
+                <span class="d-inline-block col-4">Other Refresh Rate</span>
+                <p id="otherRefreshRate"></p>
+              </div>
+              <div class="d-flex table-border-bottom dpi">
+                <span class="d-inline-block col-4">DPI</span>
+                <p id="dpi"></p>
+              </div>
+              <div class="d-flex table-border-bottom connectivity">
+                <span class="d-inline-block col-4">Connectivity</span>
+                <p id="connectivity"></p>
+              </div>
+              <div class="d-flex table-border-bottom powerRating">
+                <span class="d-inline-block col-4">Power Rating</span>
+                <p id="powerRating"></p>
+              </div>
+              <div class="d-flex table-border-bottom heatSettings">
+                <span class="d-inline-block col-4">Heat Settings</span>
+                <p id="heatSettings"></p>
+              </div>
+              <div class="d-flex table-border-bottom speedSettings">
+                <span class="d-inline-block col-4">Speed Settings</span>
+                <p id="speedSettings"></p>
+              </div>
+              <div class="d-flex table-border-bottom attachments">
+                <span class="d-inline-block col-4">Attachments</span>
+                <p id="attachments"></p>
+              </div>
+              <div class="d-flex table-border-bottom cableLength">
+                <span class="d-inline-block col-4">Cable Length</span>
+                <p id="cableLength"></p>
+              </div>
+              <div class="d-flex table-border-bottom hdmiType">
+                <span class="d-inline-block col-4">HDMI Type</span>
+                <p id="hdmiType"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherHdmiType">
+                <span class="d-inline-block col-4">Other HDMI Type</span>
+                <p id="otherHdmiType"></p>
+              </div>
+              <div class="d-flex table-border-bottom compatibleHeadphoneModels">
+                <span class="d-inline-block col-4"
+                  >Compatible Headphone Models</span
+                >
+                <p id="compatibleHeadphoneModels"></p>
+              </div>
+              <div class="d-flex table-border-bottom shavingSystem">
+                <span class="d-inline-block col-4">Shaving System</span>
+                <p id="shavingSystem"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherShavingSystem">
+                <span class="d-inline-block col-4">Other Shaving System</span>
+                <p id="otherShavingSystem"></p>
+              </div>
+              <div class="d-flex table-border-bottom cleaningSystem">
+                <span class="d-inline-block col-4">Cleaning System</span>
+                <p id="cleaningSystem"></p>
+              </div>
+              <div class="d-flex table-border-bottom compatibilityAccessories">
+                <span class="d-inline-block col-4"
+                  >Compatibility Accessories</span
+                >
+                <p id="compatibilityAccessories"></p>
+              </div>
+              <div class="d-flex table-border-bottom trackingMetrics">
+                <span class="d-inline-block col-4">Tracking Metrics</span>
+                <p id="trackingMetrics"></p>
+              </div>
+              <div class="d-flex table-border-bottom voiceAssistance">
+                <span class="d-inline-block col-4">Voice Assistance</span>
+                <p id="voiceAssistance"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherVoiceAssistance">
+                <span class="d-inline-block col-4">Other Voice Assistance</span>
+                <p id="otherVoiceAssistance"></p>
+              </div>
+              <div class="d-flex table-border-bottom colorTemperature">
+                <span class="d-inline-block col-4">Color Temperature</span>
+                <p id="colorTemperature"></p>
+              </div>
+              <div class="d-flex table-border-bottom brightness">
+                <span class="d-inline-block col-4">Brightness</span>
+                <p id="brightness"></p>
+              </div>
+              <div class="d-flex table-border-bottom smartFeatures">
+                <span class="d-inline-block col-4">Smart Features</span>
+                <p id="smartFeatures"></p>
+              </div>
+              <div class="d-flex table-border-bottom installationType">
+                <span class="d-inline-block col-4">Installation Type</span>
+                <p id="installationType"></p>
+              </div>
+              <div class="d-flex table-border-bottom measurementMetrics">
+                <span class="d-inline-block col-4">Measurement Metrics</span>
+                <p id="measurementMetrics"></p>
+              </div>
+              <div class="d-flex table-border-bottom maxWeightCapacity">
+                <span class="d-inline-block col-4">Max Weight Capacity</span>
+                <p id="maxWeightCapacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom indoorOutdoor">
+                <span class="d-inline-block col-4">Indoor Outdoor</span>
+                <p id="indoorOutdoor"></p>
+              </div>
+              <div class="d-flex table-border-bottom compatibleOperatingSystem">
+                <span class="d-inline-block col-4"
+                  >Compatible Operating System</span
+                >
+                <p id="compatibleOperatingSystem"></p>
+              </div>
+              <div
+                class="d-flex table-border-bottom OtherCompatibleOperatingSystem"
+              >
+                <span class="d-inline-block col-4"
+                  >Other Compatible Operating System</span
+                >
+                <p id="OtherCompatibleOperatingSystem"></p>
+              </div>
+              <div class="d-flex table-border-bottom brandMaterial">
+                <span class="d-inline-block col-4">Band Material</span>
+                <p id="brandMaterial"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherBrandMaterial">
+                <span class="d-inline-block col-4">Other Band Material</span>
+                <p id="otherBrandMaterial"></p>
+              </div>
+              <div class="d-flex table-border-bottom numberOfSlices">
+                <span class="d-inline-block col-4">Number of Slices</span>
+                <p id="numberOfSlices"></p>
+              </div>
+              <div class="d-flex table-border-bottom mountType">
+                <span class="d-inline-block col-4">Mount Type</span>
+                <p id="mountType"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherMountType">
+                <span class="d-inline-block col-4">Other Mount Type</span>
+                <p id="otherMountType"></p>
+              </div>
+              <div class="d-flex table-border-bottom compatibleTvSize">
+                <span class="d-inline-block col-4">Compatible TV Size</span>
+                <p id="compatibleTvSize"></p>
+              </div>
+              <div class="d-flex table-border-bottom weightCapacity">
+                <span class="d-inline-block col-4">Weight Capacity</span>
+                <p id="weightCapacity"></p>
+              </div>
+              <div class="d-flex table-border-bottom screenType">
+                <span class="d-inline-block col-4">Screen Type</span>
+                <p id="screenType"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherScreenType">
+                <span class="d-inline-block col-4">Other Screen Type</span>
+                <p id="otherScreenType"></p>
+              </div>
+              <div class="d-flex table-border-bottom remoteType">
+                <span class="d-inline-block col-4">Remote Type</span>
+                <p id="remoteType"></p>
+              </div>
+              <div class="d-flex table-border-bottom otherRemoteType">
+                <span class="d-inline-block col-4">Other Remote Type</span>
+                <p id="otherRemoteType"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/adminWeb/plugins/moment/moment.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-date-range-picker/0.21.1/jquery.daterangepicker.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<script type="text/javascript">
+  jQuery(document).ready(function () {
+    loadData(1);
+
+    $(".input-daterange-datepicker").daterangepicker({
+      locale: {
+        format: "DD-MM-YYYY",
+      },
+    });
+
+    $("#dateRangePicker").on("apply.daterangepicker", function (ev, picker) {
+      loadData();
+    });
+
+    function loadData(ready = 0) {
+      var dataTable = $("#quickSellList").DataTable();
+
+      // Destroy the existing DataTable instance
+      dataTable.destroy();
+
+      var dataTable = $("#quickSellList").DataTable({
+        columnDefs: [
+          {
+            width: "5%",
+            targets: [0, 8],
+          },
+          {
+            width: "9%",
+            targets: [2],
+          },
+        ],
+        paging: true,
+        responsive: true,
+        searching: true,
+        processing: true,
+        serverSide: true,
+        ordering: true,
+        language: {
+          oPaginate: {
+            sNext: '<i class="fa fa-forward"></i>',
+            sPrevious: '<i class="fa fa-backward"></i>',
+            sFirst: '<i class="fa fa-step-backward"></i>',
+            sLast: '<i class="fa fa-step-forward"></i>',
+          },
+        },
+        ajax: {
+          url: "<%= process.env.APP_URL_ADMIN %>/webAdmin/quick-sell/sell-items",
+          type: "GET",
+          data: function (d) {
+            var dateRange = $("#dateRangePicker").val();
+            var dates = dateRange.split(" - ");
+
+            d.startDate = ready == 1 ? null : dates[0];
+            d.endDate = dates[1];
+          },
+        },
+        columns: [
+          {
+            data: null,
+            render: function (data, type, row, meta) {
+              return meta.row + meta.settings._iDisplayStart + 1;
+            },
+          },
+          {
+            data: "orderId",
+            render: function (data, type, row) {
+              return `<a href="<%= process.env.APP_URL_ADMIN %>/webAdmin/manageUser/${row.user._id}">${row.user._id}</a>`;
+            },
+          },
+          {
+            data: "orderId",
+            render: function (data, type, row) {
+              return `# ${row.orderId}`;
+            },
+          },
+          {
+            data: "orderDate",
+            render: function (data, type, row) {
+              const date = row.orderDate;
+              const originalDate = new Date(date);
+
+              const day = String(originalDate.getDate()).padStart(2, "0");
+              const month = String(originalDate.getMonth() + 1).padStart(
+                2,
+                "0"
+              );
+              const year = originalDate.getFullYear();
+
+              const formattedDate = `${day}-${month}-${year}`;
+              return formattedDate;
+            },
+          },
+          {
+            data: "pickUpAddress",
+            render: function (data, type, row) {
+              if (row.address.type) {
+                if (row.address.type === "0") {
+                  address = `${row.address.floor}, ${row.address.buildingName}, ${row.address.company}, ${row.address.street}, ${row.address.countryCode} ${row.address.mobileNumber}`;
+                } else if (row.address.type === "1") {
+                  address = `${row.address.houseNumber}, ${row.address.street}, ${row.address.countryCode} ${row.address.mobileNumber}`;
+                } else if (row.address.type === "2") {
+                  address = `${row.address.floor}, ${row.address.apartmentNo}, ${row.address.buildingName}, ${row.address.street}, ${row.address.countryCode} ${row.address.mobileNumber}`;
+                }
+              }
+
+              return row.address != ""
+                ? `<div class="wrapped-content" style="width: 295px;word-wrap: break-word;text-wrap: initial;"> ${address} </div>`
+                : `<div style="text-align: center;font-weight: 700;">-</div>`;
+            },
+          },
+          {
+            data: "sellingItems",
+            render: function (data, type, row) {
+              let i = 0;
+              return row.sellingItems
+                .map((item) => {
+                  i++;
+                  return `
+                                        <center>
+                                            <div class="item-container d-flex align-items-center justify-content-center" style="width: 100%; margin-top: 4px;">
+                                                <div style="margin-right: 8px;">Item ${i}.</div>
+                                                <a class="btn btn-secondary shadow btn-xs sharp me-1" href="#!" onclick="viewProduct('${item.itemId}')" data-bs-toggle="modal" data-bs-target="#exampleModals" style="margin-right: 8px;">
+                                                    <i class="fa fa-eye" style="color:#000;"></i>
+                                                </a>
+                                            </div>
+                                        </center>
+                                        </br>
+                                    `;
+                })
+                .join(" ");
+            },
+          },
+          {
+            data: "sellingItems",
+            render: function (data, type, row) {
+              console.log(row, "row");
+              let i = 0;
+              return row.items
+                .map((item) => {
+                  i++;
+
+                  return `
+                                        <center>
+                                            <div class="item-container d-flex align-items-center justify-content-center" style="width: 100%; margin-top: 4px;">
+                                                ${item.price}. &nbsp;
+                                                <a href="#!" onclick="priceChangeRequest('${row._id}','${item._id}')">
+                                                   <i class="fa fa-pencil-square-o" style="font-size: 18px;"></i>
+                                                </a>
+                                            </div>
+                                        </center>
+                                        </br>
+                                    `;
+                })
+                .join(" ");
+            },
+          },
+          {
+            data: "sellingItems",
+            render: function (data, type, row) {
+              return row.sellingItems
+                .map((item) => {
+                  let badgeClass = getBadgeClass(item.status);
+                  let selectedValue = statusItemOriginalValue(item.status);
+
+                  let options = ["Item Accepted", "Item Rejected"];
+
+                  let dropdown =
+                    '<div class="position-relative d-flex align-items-center gap-2">';
+                  dropdown +=
+                    '<span class="badge ' +
+                    badgeClass +
+                    ' px-2">' +
+                    selectedValue +
+                    "</span>";
+                  dropdown +=
+                    '<select class="form-select small-dropdown" onchange="updateItemStatus(this, \'' +
+                    item.itemId +
+                    "' ,  '" +
+                    row._id +
+                    '\')" style="display:none;">';
+
+                  dropdown +=
+                    '<option value="" disabled selected>Select Status</option>';
+                  options.forEach((option) => {
+                    let selected = option === selectedValue ? "selected" : "";
+                    dropdown += `<option value="${option}" ${selected}>${option}</option>`;
+                  });
+                  dropdown += "</select>";
+
+                  dropdown +=
+                    '<a class="btn btn-secondary shadow btn-xs sharp me-1" href="#!" onclick="toggleDropdown(this)" style="margin-right: 8px;">';
+                  dropdown +=
+                    '<i class="fa fa-pencil" style="color:#000;"></i>';
+                  dropdown += "</a>";
+                  dropdown += "</div>";
+                  dropdown += "<br/>";
+
+                  return `<center><div class="item-container" style="width: 100%; margin-top: 4px;">${dropdown}</div></center>`;
+                })
+                .join(" ");
+            },
+          },
+          {
+            data: "status",
+            render: function (data, type, row) {
+              let options = ["Submiited", "Under Review"];
+
+              var storedValue = localStorage.getItem(
+                "selectedStatus_" + row._id
+              );
+              var selectedValue = statusOrderOriginalValue(row.status);
+
+              var dropdown =
+                '<div class="position-relative d-flex align-items-center gap-2">';
+              dropdown +=
+                '<span class="badge ' +
+                getBadgeClass(selectedValue) +
+                ' px-2">' +
+                selectedValue +
+                "</span>";
+              dropdown +=
+                '<select class="form-select small-dropdown" id="statusDropdown_' +
+                row._id +
+                '" onchange="updateStatusAndDisplay(this, \'' +
+                row._id +
+                '\')" style="display:none;">';
+
+              for (var i = 0; i < options.length; i++) {
+                var selected = options[i] === selectedValue ? "selected" : "";
+                dropdown +=
+                  '<option value="' +
+                  options[i] +
+                  '" ' +
+                  selected +
+                  ">" +
+                  options[i] +
+                  "</option>";
+              }
+
+              dropdown += "</select>";
+              dropdown +=
+                '<a class="btn btn-secondary shadow btn-xs sharp me-1" href="#!" onclick="toggleDropdown(this)" style="margin-right: 8px;">';
+              dropdown += '<i class="fa fa-pencil" style="color:#000;"></i>';
+              dropdown += "</a>";
+              dropdown += "</div>";
+
+              return dropdown;
+            },
+          },
+          {
+            data: "send",
+            render: function (data, type, row) {
+              console.log(row, "0000");
+              return `<div style="text-align: center";><button class="badge badge-success" onclick="refundRequest('${row._id}')" >Send</button></div>`;
+            },
+          },
+        ],
+      });
+
+      function saveKeywordsToDatabase(keyword, type = "4") {
+        $.ajax({
+          url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/save-history/save?saveQuickSellOrderKeywords=${keyword}&type=${type}`,
+          type: "POST",
+          data: { saveQuickSellOrderKeywords: keyword },
+          success: function (data) {
+            console.log("Search keyword saved successfully:", keyword);
+          },
+          error: function (error) {
+            console.error("Error saving search keyword:", error);
+          },
+        });
+      }
+
+      var currentSearch = "";
+
+      $("#quickSellList_filter input").on("input", function () {
+        var previousSearch = currentSearch;
+
+        currentSearch = $(this).val().trim();
+
+        if (previousSearch && !currentSearch) {
+          saveKeywordsToDatabase(previousSearch);
+          displayLastSearchesDropdown();
+        }
+      });
+
+      function displayLastSearchesDropdown(type = "4") {
+        $.ajax({
+          url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/save-history/search-keywords?type=${type}`,
+          type: "GET",
+          success: function (data) {
+            var dropdownList = $("#lastSearchesDropdown");
+            dropdownList.empty();
+
+            data.forEach(function (search) {
+              // $("#productlist").DataTable().ajax.reload();
+
+              var listItem = $("<li>").addClass("dropdown-item").text(search);
+              listItem.on("click", function () {
+                $("#quickSellList_filter input").val(search).trigger("input");
+              });
+              dropdownList.append(listItem);
+
+              $("#quickSellList_filter input").val("");
+              dataTable.search("").draw();
+            });
+          },
+          error: function (error) {
+            console.error("Error fetching last searches:", error);
+          },
+        });
+      }
+
+      displayLastSearchesDropdown();
+    }
+  });
+
+  function sendConfirmation(orderId) {
+    Swal.fire({
+      title: "Are you sure you want to send for confirmation ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, send it !!",
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/quick-sell/send-confirmation`,
+            type: "POST",
+            data: {
+              productId: productId,
+              status: statusValue,
+              paymentType: paymentType,
+            },
+            success: function () {
+              console.log("djfjfj");
+              Swal.fire("Sended!", "Send successfully", "success").then(() => {
+                $("#quickSellList").DataTable().ajax.reload();
+              });
+            },
+            error: function (xhr, status, error) {
+              const data = JSON.parse(xhr.responseText);
+              Swal.fire({
+                title: `${data.message || status}`,
+                icon: "error",
+              });
+            },
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function statusItemOriginalValue(status) {
+    if (status == 1) {
+      return "Item Submitted";
+    } else if (status == 2) {
+      return "Item Under Review";
+    } else if (status == 3) {
+      return "Item Accepted";
+    } else if (status == 4) {
+      return "Item Rejected";
+    } else if (status == 5) {
+      return "Item Completed";
+    } else {
+      return "No Status";
+    }
+  }
+
+  function statusOrderOriginalValue(status) {
+    if (status == 1) {
+      return "Submitted";
+    } else if (status == 2) {
+      return "Under Review";
+    } else if (status == 3) {
+      return "Partial Acceptance";
+    } else if (status == 4) {
+      return "Order Rejected";
+    } else if (status == 5) {
+      return "Completed";
+    } else {
+      return "No Status";
+    }
+  }
+
+  function getBadgeClass(status) {
+    switch (status) {
+      case 1:
+        return "badge-info";
+      case 2:
+        return "badge-warning";
+      case 3:
+        return "badge-dark";
+      case 4:
+        return "badge-danger";
+      case 5:
+        return "badge-dark";
+      case 6:
+        return "badge-danger";
+      case 7:
+        return "badge-info";
+      case 8:
+        return "badge-warning";
+      case 9:
+        return "badge-warning";
+      default:
+        return "badge-secondary";
+    }
+  }
+
+  function toggleDropdown(element) {
+    var dropdown = $(element).siblings("select");
+    dropdown.toggle();
+  }
+
+  function updateStatus(dropdown, itemId) {
+    var status = dropdown.value;
+    var statusValue;
+
+    switch (status) {
+      case "Submiited":
+        statusValue = 1;
+        break;
+      case "Under Review":
+        statusValue = 2;
+        break;
+      case "Partial Acceptance":
+        statusValue = 3;
+        break;
+      case "Order Rejected":
+        statusValue = 4;
+        break;
+      case "Completed":
+        statusValue = 5;
+        break;
+      default:
+        statusValue = -1;
+    }
+
+    Swal.fire({
+      title: "Are you sure you want to update this order status ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, update it !!",
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/quick-sell/update-status/${itemId}`,
+            type: "POST",
+            data: {
+              itemId: itemId,
+              status: statusValue,
+            },
+            success: function () {
+              Swal.fire(
+                "Updated!",
+                "Item Status updated successfully",
+                "success"
+              ).then(() => {
+                $("#quickSellList").DataTable().ajax.reload();
+              });
+            },
+            error: function (xhr, status, error) {
+              const data = JSON.parse(xhr.responseText);
+              Swal.fire({
+                title: `${data.message || status}`,
+                icon: "error",
+              });
+            },
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function priceChangeRequest(orderId, itemId) {
+    Swal.fire({
+      title: "Final Price",
+      input: "text",
+      inputLabel:
+        "The price change request will be sent to the customer and they will either accpet or reject your request.",
+      inputPlaceholder: "Enter the price",
+      showCancelButton: true,
+      customClass: {
+        popup: "custom-swal-popup",
+        validationMessage: "custom-swal-validation-message",
+      },
+      inputValidator: (value) => {
+        if (!value) {
+          return "Price is required";
+        }
+      },
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/quick-sell/price-request`,
+            type: "POST",
+            data: {
+              orderId: orderId,
+              itemId: itemId,
+              price: result.value,
+            },
+            success: function () {
+              Swal.fire(
+                "Send!",
+                "Send price change request successfully",
+                "success"
+              ).then(() => {
+                $("#quickSellList").DataTable().ajax.reload();
+              });
+            },
+            error: function (xhr, status, error) {
+              const data = JSON.parse(xhr.responseText);
+              Swal.fire({
+                title: `${data.message || status}`,
+                icon: "error",
+              });
+            },
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function updateStatusAndDisplay(dropdown, itemId) {
+    var selectedValue = $(dropdown).val();
+    localStorage.setItem("selectedStatus_" + itemId, selectedValue);
+    updateStatus(dropdown, itemId);
+  }
+
+  //update items status
+  function updateItemStatus(dropdown, itemId, orderId) {
+    var status = dropdown.value;
+    console.log(status);
+    var statusValue;
+
+    switch (status) {
+      case "Item Submitted":
+        statusValue = 1;
+        break;
+      case "Item Under Review":
+        statusValue = 2;
+        break;
+      case "Item Accepted":
+        statusValue = 3;
+        break;
+      case "Item Rejected":
+        statusValue = 4;
+        break;
+      case "Item Completed":
+        statusValue = 5;
+        break;
+      default:
+        statusValue = -1;
+    }
+
+    console.log(statusValue, "sv");
+
+    Swal.fire({
+      title: "Are you sure you want to update this item status ?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, update it !!",
+    })
+      .then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/quick-sell/update-item-status/${itemId}`,
+            type: "POST",
+            data: {
+              itemId: itemId,
+              status: statusValue,
+              orderId: orderId,
+            },
+            success: function () {
+              if (statusValue !== 4) {
+                Swal.fire(
+                  "Updated!",
+                  "Item Status updated successfully",
+                  "success"
+                ).then(() => {
+                  $("#quickSellList").DataTable().ajax.reload();
+                });
+              } else {
+                console.log("others");
+                Swal.fire({
+                  title: "Send Rejection Reason",
+                  input: "select",
+                  inputLabel:
+                    "You have to send the reason of the rejection for the item.",
+                  inputOptions: {
+                    "High asking price": "High asking price",
+                    "Poor item condition": "Poor item condition",
+                    "Item does not meet quality standards":
+                      "Item does not meet quality standards",
+                    "Item is not authentic": "Item is not authentic",
+                  },
+                  inputPlaceholder: "Select a reason",
+                  showCancelButton: true,
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    $.ajax({
+                      url: `<%= process.env.APP_URL_ADMIN %>/webAdmin/quick-sell/update-item-status/${itemId}`,
+                      type: "POST",
+                      data: {
+                        itemId: itemId,
+                        status: statusValue,
+                        orderId: orderId,
+                      },
+                      success: function () {
+                        Swal.fire(
+                          "Send!",
+                          "Send rejection reason successfully",
+                          "success"
+                        ).then(() => {
+                          $("#quickSellList").DataTable().ajax.reload();
+                        });
+                      },
+                      error: function (xhr, status, error) {
+                        const data = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                          title: `${data.message || status}`,
+                          icon: "error",
+                        });
+                      },
+                    }).catch((err) => console.log(err));
+                  }
+                });
+              }
+            },
+            error: function (xhr, status, error) {
+              const data = JSON.parse(xhr.responseText);
+              Swal.fire({
+                title: `${data.message || status}`,
+                icon: "error",
+              });
+            },
+          });
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+
+  function viewProduct(itemId) {
+    $.ajax({
+      url: `/webAdmin/quick-sell/view-item/${itemId}`,
+      type: "GET",
+      data: { action: 0 },
+    }).then((productData) => {
+      let imageContainer = document.getElementById("imageContainer");
+      imageContainer.innerHTML = "";
+
+      for (let i = 0; i < productData.img.length; i++) {
+        var img = document.createElement("img");
+        img.src = `<%= process.env.APP_URL_ADMIN %>/${productData.img[i].image}`;
+        img.style.height = "100px";
+        img.style.width = "100px";
+        img.style.marginRight = "10px";
+        img.style.marginLeft = "14px";
+        imageContainer.appendChild(img);
+      }
+
+      function updateElement(data, field, elementClass) {
+        let element = document.querySelector("." + elementClass);
+        let classList = element ? element.classList : null;
+        if (classList) classList.remove("d-flex", "d-none");
+
+        if (data !== null) {
+          if (classList) classList.add("d-flex");
+          document.getElementById(field).innerHTML = `${data}`;
+        } else {
+          if (classList) classList.add("d-none");
+        }
+      }
+
+      updateElement(
+        productData.product.productName,
+        "productName",
+        "productName"
+      );
+      updateElement(productData.product.brand, "brand", "brand");
+      updateElement(productData.product.otherBrand, "otherBrand", "otherBrand");
+      updateElement(productData.product.model, "model", "model");
+      updateElement(productData.product.conditions, "conditions", "conditions");
+      updateElement(productData.product.price, "price", "price");
+      updateElement(
+        productData.product.priceFlexibility,
+        "priceFlexibility",
+        "priceFlexibility"
+      );
+      updateElement(
+        productData.product.warrantyStatus,
+        "warrantyStatus",
+        "warrantyStatus"
+      );
+      updateElement(
+        productData.product.additionalDetails,
+        "additionalDetails",
+        "additionalDetails"
+      );
+      updateElement(productData.product.screenSize, "screenSize", "screenSize");
+      updateElement(productData.product.features, "features", "features");
+      updateElement(
+        productData.product.connectivityFeatures,
+        "connectivityFeatures",
+        "connectivityFeatures"
+      );
+      updateElement(
+        productData.product.smartTvFeatures,
+        "smartTvFeatures",
+        "smartTvFeatures"
+      );
+      updateElement(
+        productData.product.coolingCapacity,
+        "coolingCapacity",
+        "coolingCapacity"
+      );
+      updateElement(
+        productData.product.energyEfficiency,
+        "energyEfficiency",
+        "energyEfficiency"
+      );
+      updateElement(
+        productData.product.otherScreenSize,
+        "otherScreenSize",
+        "otherScreenSize"
+      );
+      updateElement(productData.product.storage, "storage", "storage");
+      updateElement(
+        productData.product.otherStorage,
+        "otherStorage",
+        "otherStorage"
+      );
+      updateElement(productData.product.ram, "ram", "ram");
+      updateElement(productData.product.otherRam, "otherRam", "otherRam");
+      updateElement(
+        productData.product.batteryLife,
+        "batteryLife",
+        "batteryLife"
+      );
+      updateElement(productData.product.type, "type", "type");
+      updateElement(productData.product.otherType, "otherType", "otherType");
+      updateElement(productData.product.color, "color", "color");
+      updateElement(
+        productData.product.blenderCapacity,
+        "blenderCapacity",
+        "blenderCapacity"
+      );
+      updateElement(
+        productData.product.compatibility,
+        "compatibility",
+        "compatibility"
+      );
+      updateElement(
+        productData.product.displayType,
+        "displayType",
+        "displayType"
+      );
+      updateElement(
+        productData.product.otherDisplayType,
+        "otherDisplayType",
+        "otherDisplayType"
+      );
+      updateElement(productData.product.cuffSize, "cuffSize", "cuffSize");
+      updateElement(
+        productData.product.powerSource,
+        "powerSource",
+        "powerSource"
+      );
+      updateElement(
+        productData.product.otherPowerSource,
+        "otherPowerSource",
+        "otherPowerSource"
+      );
+      updateElement(productData.product.feature, "feature", "feature");
+      updateElement(productData.product.material, "material", "material");
+      updateElement(
+        productData.product.otherMaterial,
+        "otherMaterial",
+        "otherMaterial"
+      );
+      updateElement(productData.product.size, "size", "size");
+      updateElement(productData.product.otherSize, "otherSize", "otherSize");
+      updateElement(
+        productData.product.focalLength,
+        "focalLength",
+        "focalLength"
+      );
+      updateElement(productData.product.aperture, "aperture", "aperture");
+      updateElement(
+        productData.product.maxLoadCapacity,
+        "maxLoadCapacity",
+        "maxLoadCapacity"
+      );
+      updateElement(productData.product.megapixels, "megapixels", "megapixels");
+      updateElement(productData.product.sensorSize, "sensorSize", "sensorSize");
+      updateElement(productData.product.lensMount, "lensMount", "lensMount");
+      updateElement(
+        productData.product.compatibleBrand,
+        "compatibleBrand",
+        "compatibleBrand"
+      );
+      updateElement(
+        productData.product.connectorType,
+        "connectorType",
+        "connectorType"
+      );
+      updateElement(
+        productData.product.otherConnectorType,
+        "otherConnectorType",
+        "otherConnectorType"
+      );
+      updateElement(
+        productData.product.outputSpecification,
+        "outputSpecification",
+        "outputSpecification"
+      );
+      updateElement(productData.product.processor, "processor", "processor");
+      updateElement(
+        productData.product.otherProcessor,
+        "otherProcessor",
+        "otherProcessor"
+      );
+      updateElement(
+        productData.product.graphicsCard,
+        "graphicsCard",
+        "graphicsCard"
+      );
+      updateElement(
+        productData.product.otherGraphicsCard,
+        "otherGraphicsCard",
+        "otherGraphicsCard"
+      );
+      updateElement(
+        productData.product.operatingSystem,
+        "operatingSystem",
+        "operatingSystem"
+      );
+      updateElement(
+        productData.product.otherOperatingSystem,
+        "otherOperatingSystem",
+        "otherOperatingSystem"
+      );
+      updateElement(
+        productData.product.memoryCapacity,
+        "memoryCapacity",
+        "memoryCapacity"
+      );
+      updateElement(
+        productData.product.recordingQuality,
+        "recordingQuality",
+        "recordingQuality"
+      );
+      updateElement(
+        productData.product.additionalFeatures,
+        "additionalFeatures",
+        "additionalFeatures"
+      );
+      updateElement(productData.product.capacity, "capacity", "capacity");
+      updateElement(
+        productData.product.otherCapacity,
+        "otherCapacity",
+        "otherCapacity"
+      );
+      updateElement(
+        productData.product.connectionType,
+        "connectionType",
+        "connectionType"
+      );
+      updateElement(
+        productData.product.otherConnectionType,
+        "otherConnectionType",
+        "otherConnectionType"
+      );
+      updateElement(productData.product.formFactor, "formFactor", "formFactor");
+      updateElement(
+        productData.product.otherFormFactor,
+        "otherFormFactor",
+        "otherFormFactor"
+      );
+      updateElement(
+        productData.product.recommendedSkinType,
+        "recommendedSkinType",
+        "recommendedSkinType"
+      );
+      updateElement(
+        productData.product.otherRecommendedSkinType,
+        "otherRecommendedSkinType",
+        "otherRecommendedSkinType"
+      );
+      updateElement(
+        productData.product.cleaningBrushType,
+        "cleaningBrushType",
+        "cleaningBrushType"
+      );
+      updateElement(
+        productData.product.otherCleaningBrushType,
+        "otherCleaningBrushType",
+        "otherCleaningBrushType"
+      );
+      updateElement(
+        productData.product.waterResistance,
+        "waterResistance",
+        "waterResistance"
+      );
+      updateElement(
+        productData.product.chargingType,
+        "chargingType",
+        "chargingType"
+      );
+      updateElement(
+        productData.product.activityTracking,
+        "activityTracking",
+        "activityTracking"
+      );
+      updateElement(
+        productData.product.otherActivityTracking,
+        "otherActivityTracking",
+        "otherActivityTracking"
+      );
+      updateElement(productData.product.resolution, "resolution", "resolution");
+      updateElement(
+        productData.product.storageCapacity,
+        "storageCapacity",
+        "storageCapacity"
+      );
+      updateElement(
+        productData.product.otherStorageCapacity,
+        "otherStorageCapacity",
+        "otherStorageCapacity"
+      );
+      updateElement(
+        productData.product.includedAccessories,
+        "includedAccessories",
+        "includedAccessories"
+      );
+      updateElement(
+        productData.product.compatiblePlatform,
+        "compatiblePlatform",
+        "compatiblePlatform"
+      );
+      updateElement(
+        productData.product.otherCompatiblePlatform,
+        "otherCompatiblePlatform",
+        "otherCompatiblePlatform"
+      );
+      updateElement(productData.product.switchType, "switchType", "switchType");
+      updateElement(
+        productData.product.backlighting,
+        "backlighting",
+        "backlighting"
+      );
+      updateElement(
+        productData.product.keyFeatures,
+        "keyFeatures",
+        "keyFeatures"
+      );
+      updateElement(
+        productData.product.refreshRate,
+        "refreshRate",
+        "refreshRate"
+      );
+      updateElement(
+        productData.product.otherRefreshRate,
+        "otherRefreshRate",
+        "otherRefreshRate"
+      );
+      updateElement(productData.product.dpi, "dpi", "dpi");
+      updateElement(
+        productData.product.connectivity,
+        "connectivity",
+        "connectivity"
+      );
+      updateElement(
+        productData.product.powerRating,
+        "powerRating",
+        "powerRating"
+      );
+      updateElement(
+        productData.product.heatSettings,
+        "heatSettings",
+        "heatSettings"
+      );
+      updateElement(
+        productData.product.speedSettings,
+        "speedSettings",
+        "speedSettings"
+      );
+      updateElement(
+        productData.product.attachments,
+        "attachments",
+        "attachments"
+      );
+      updateElement(
+        productData.product.cableLength,
+        "cableLength",
+        "cableLength"
+      );
+      updateElement(productData.product.hdmiType, "hdmiType", "hdmiType");
+      updateElement(
+        productData.product.otherHdmiType,
+        "otherHdmiType",
+        "otherHdmiType"
+      );
+      updateElement(
+        productData.product.compatibleHeadphoneModels,
+        "compatibleHeadphoneModels",
+        "compatibleHeadphoneModels"
+      );
+      updateElement(
+        productData.product.shavingSystem,
+        "shavingSystem",
+        "shavingSystem"
+      );
+      updateElement(
+        productData.product.otherShavingSystem,
+        "otherShavingSystem",
+        "otherShavingSystem"
+      );
+      updateElement(
+        productData.product.cleaningSystem,
+        "cleaningSystem",
+        "cleaningSystem"
+      );
+      updateElement(
+        productData.product.compatibilityAccessories,
+        "compatibilityAccessories",
+        "compatibilityAccessories"
+      );
+      updateElement(
+        productData.product.trackingMetrics,
+        "trackingMetrics",
+        "trackingMetrics"
+      );
+      updateElement(
+        productData.product.voiceAssistance,
+        "voiceAssistance",
+        "voiceAssistance"
+      );
+      updateElement(
+        productData.product.otherVoiceAssistance,
+        "otherVoiceAssistance",
+        "otherVoiceAssistance"
+      );
+      updateElement(
+        productData.product.colorTemperature,
+        "colorTemperature",
+        "colorTemperature"
+      );
+      updateElement(productData.product.brightness, "brightness", "brightness");
+      updateElement(
+        productData.product.smartFeatures,
+        "smartFeatures",
+        "smartFeatures"
+      );
+      updateElement(
+        productData.product.installationType,
+        "installationType",
+        "installationType"
+      );
+      updateElement(
+        productData.product.measurementMetrics,
+        "measurementMetrics",
+        "measurementMetrics"
+      );
+      updateElement(
+        productData.product.maxWeightCapacity,
+        "maxWeightCapacity",
+        "maxWeightCapacity"
+      );
+      updateElement(
+        productData.product.indoorOutdoor,
+        "indoorOutdoor",
+        "indoorOutdoor"
+      );
+      updateElement(
+        productData.product.compatibleOperatingSystem,
+        "compatibleOperatingSystem",
+        "compatibleOperatingSystem"
+      );
+      updateElement(
+        productData.product.OtherCompatibleOperatingSystem,
+        "OtherCompatibleOperatingSystem",
+        "OtherCompatibleOperatingSystem"
+      );
+      updateElement(
+        productData.product.brandMaterial,
+        "brandMaterial",
+        "brandMaterial"
+      );
+      updateElement(
+        productData.product.otherBrandMaterial,
+        "otherBrandMaterial",
+        "otherBrandMaterial"
+      );
+      updateElement(
+        productData.product.numberOfSlices,
+        "numberOfSlices",
+        "numberOfSlices"
+      );
+      updateElement(productData.product.mountType, "mountType", "mountType");
+      updateElement(
+        productData.product.otherMountType,
+        "otherMountType",
+        "otherMountType"
+      );
+      updateElement(
+        productData.product.compatibleTvSize,
+        "compatibleTvSize",
+        "compatibleTvSize"
+      );
+      updateElement(
+        productData.product.weightCapacity,
+        "weightCapacity",
+        "weightCapacity"
+      );
+      updateElement(productData.product.screenType, "screenType", "screenType");
+      updateElement(
+        productData.product.otherScreenType,
+        "otherScreenType",
+        "otherScreenType"
+      );
+      updateElement(productData.product.remoteType, "remoteType", "remoteType");
+      updateElement(
+        productData.product.otherRemoteType,
+        "otherRemoteType",
+        "otherRemoteType"
+      );
+    });
+  }
+</script>
+
+<%- include("../layouts/footer.ejs") %>

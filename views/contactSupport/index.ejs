@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <title>Contact support</title>
+    <meta name="description" content="Customer contact support">
+    <style type="text/css">
+        a:hover {
+            text-decoration: underline !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <table style="width:100%;border-collapse:collapse;">
+        <tr>
+            <td align="center" colspan="2">
+                <h1
+                    style="color:#1e1e2d; font-weight:500; margin-bottom:10px;font-size:32px;font-family:'Rubik',sans-serif;">
+                    Contact support
+                </h1>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:30%;text-align:right;padding:5px;color:#000; font-size:15px;line-height:24px;">
+                Name:
+            </td>
+            <td style="padding:5px;color:#000; font-size:15px;line-height:24px;">
+                <%= contactSupportStore.name %>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:30%;text-align:right;padding:5px;color:#000; font-size:15px;line-height:24px;">
+                Email:
+            </td>
+            <td style="padding:5px;color:#000; font-size:15px;line-height:24px;">
+                <%= contactSupportStore.email %>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:30%;text-align:right;padding:5px;color:#000; font-size:15px;line-height:24px;">
+                Message:
+            </td>
+            <td style="padding:5px;color:#000; font-size:15px;line-height:24px;">
+                <%= contactSupportStore.message %>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

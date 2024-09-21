@@ -1,0 +1,918 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>API Changelogs | HARAGE-REFURBISHED-ECOMMERCE-APP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/logo.svg">
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
+    <style type="text/css">
+        body {
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .text-muted {
+            color: #8492a6 !important;
+        }
+
+        .bg-light {
+            background-color: #add8e624 !important;
+        }
+
+        ul {
+            list-style-position: outside
+        }
+
+        .text-success {
+            color: #0f84ab !important;
+        }
+
+        .links {
+            color: #e83e8c;
+        }
+    </style>
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1050.0" data-gr-ext-installed="">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css"
+        integrity="sha256-nwNjrH7J9zS/Ti4twtWX7OsC5QdQHCIKTv5cLMsGo68=" crossorigin="anonymous">
+    <div class="container">
+        <div class="row justify-content-center">
+            <h3 class="pt-4 pb-4 pl-3">HARAGE REFURBISHED ECOMMERCE APP</h3>
+            <hr><br>
+            <div>
+                <img src="/img/logo2.svg" height="95" alt="HARAGE">
+            </div>
+            <div class="col-lg-12 col-md-12 col-12 mx-auto my-auto">
+                <b>Base Url: </b>
+                <a class="links" href="<%= process.env.APP_URL_ADMIN %>/api/v1" target="_blank">
+                    <%= process.env.APP_URL_ADMIN %>/api/v1
+                </a>
+                <br>
+                <b>Super Admin Base Url: </b>
+                <a class="links" href="<%= process.env.APP_URL_ADMIN %>/super-admin" target="_blank">
+                    <%= process.env.APP_URL_ADMIN %>/super-admin
+                </a>
+                <br>
+                <b>Admin Pannel Url: </b>
+                <a class="links" href="<%= process.env.APP_URL_ADMIN %>/webAdmin/login" target="_blank">
+                    <%= process.env.APP_URL_ADMIN %>/webAdmin/login
+                </a>
+                <br>
+                <b>Swagger Url: </b>
+                <a class="links" href="<%= process.env.APP_URL_ADMIN %>/api/documentation" target="_blank">
+                    <%= process.env.APP_URL_ADMIN %>/api/documentation
+                </a>
+                <br>
+
+
+                <b>SkipCash Payment Url: </b>
+                <a class="links" href="<%= process.env.APP_URL_ADMIN %>/payment-verification" target="_blank">
+                    <%= process.env.APP_URL_ADMIN %>/payment-verification
+                </a>
+                <br>
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 9th July 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-danger">Changes</span>
+                        <ul class="mt-2">
+                            <h5 class="mt-4"><b> [Super Admin] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/update-order-status </code><br> Update order status
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/update-item-status </code><br> Update item status
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/price-request </code><br> Send price change request
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/send-rejection-reason </code><br> Send rejection reason
+                            </li>
+                
+                            <h5 class="mt-4"><b> [Customer] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /items/price-request </code><br> Accept/Reject price change request
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /order-history/sell-item-details/:id</code><br> Order history in details
+                            </li>
+                        </ul>
+
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <h5 class="mt-4"><b> [Customer] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /order-history/item-detail-action/:id </code><br> Selling Order item detail action
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 4th July 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <h5 class="mt-4"><b> [Super Admin] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/update-order-status </code><br> Update order status
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/update-item-status </code><br> Update item status
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/price-request </code><br> Send price change request
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/send-rejection-reason </code><br> Send rejection reason
+                            </li>
+
+                            <h5 class="mt-4"><b> [Customer] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /items/price-request </code><br> Accept/Reject price change request
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 14th June 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-danger">Changes</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /cart/track-order </code><br> ✓ Track order
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 29th May 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <h5 class="mt-4"><b> [Super Admin] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /admin-notification/history </code><br> Notification history for super admin
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /admin-notification/readAt/{notificationId} </code><br> Read the notification
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /admin-notification/un-read </code><br> Un read notification count
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 27th May 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /notification/history </code><br> ✓ Notification history for customer
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /notification/readAt/{notificationId} </code><br> ✓ Read the notification
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 23th May 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <h5 class="mt-4"><b> [Customer] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /fcm/token-register </code><br> Register token
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /fcm/send-notification </code><br> Testing Send push notification
+                            </li>
+                            <h5 class="mt-4"><b> [Super Admin] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /fcm/super-admin-token </code><br> Register token
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 17th May 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <h5 class="mt-4"><b> [Customer] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /customer-check-version </code><br> ✓ Check customer app version (Force
+                                update)
+                            </li>
+                            <h5 class="mt-4"><b> [Super Admin] </b></h5>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /super-check-version </code><br> ✓ Check super admin app version (Force
+                                update)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 13th May 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /cart/checkout/pay-now/{orderId}</code><br> ✓ Payment for your order (Updated
+                                API)
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /cart/order-details/{orderId} </code><br> ✓ Purchase Order details
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 8th May 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /report/report-return-list </code><br> ✓ Lists of report and return expchange
+                                list
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 3th May 2024 </b></h5>
+                        <h5 class="mt-4"><b> [Super Admin] </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /quick-sell/sell-items </code><br> ✓ History of sell items (Selling & Buying)
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /quick-sell/see-details </code><br> ✓ Full details of selling & buying order
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/assign-member </code><br> ✓ Assign member for (Selling & buying
+                                product)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 2th May 2024 </b></h5>
+                        <h5 class="mt-4"><b> 8th May 2024 Changes </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-danger">Changes</span>
+                        <ul class="mt-2">
+                            <span class="badge badge-danger">ReportReason sent ID</span>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /report </code><br> ✓ Report Product API
+                            </li>
+                            <span class="badge badge-danger">Reason sent ID</span>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /return-exchange/{productId} </code><br> ✓ Send request for return/Exchange
+                                products
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 8th Jan 2024 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /order/review/{orderId} </code><br> ✓ Order Review
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /report/{productId} </code><br> ✓ Report Product
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 28th Dec 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-danger">Changes</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /items/send-now/{addressId}</code><br> ✓ Send notification to super admin for
+                                sell items
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 21th Dec 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /order-history/invoice/{orderId}</code><br> ✓ Invoice download for your order
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 7th Dec 2023 </b></h5>
+                        <h6>[ Super Admin ]</h6>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /quick-sell/assign-member/{memberId}</code><br> ✓ Assign member
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /members/member-list</code><br> ✓ Members list
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 5th Dec 2023 </b></h5>
+                        <h6>[ Super Admin ]</h6>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/super-admin-login</code><br> ✓ Super admin login
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /quick-sell/sell-items</code><br> ✓ History of sell items
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 1st Dec 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /items/send-now/{addressId}</code><br> ✓ Send notification to super admin for
+                                sell items
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 28th Nov 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /address/default-address</code><br> ✓ Get default address
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 24th Nov 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /items/item-details/{itemId}</code><br> ✓ Get one item details
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 20th Nov 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-danger">Changes</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /category/sub-category-list/{categoryId}</code><br> ✓ Get sub-category list
+                                with sub-subCategory
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 2nd Nov 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/refresh-token</code><br> ✓ Refresh Token
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 30th Oct 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /order-history/sell-items</code><br> ✓ history of sell items
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /order-history/sell-item-details/{orderId}</code><br> ✓ History of selling
+                                order in details
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>DELETE /order-history/sell-item-delete/{itemId}</code><br> ✓ Delete sell items in
+                                history list
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 20th Oct 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-danger">Changes</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /address/add-address</code><br> ✓ Add Address
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>PUT /address/edit-address/{addressId}</code><br> ✓ Edit Address
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /address/address-list</code><br> ✓ Lists of Address
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /home-page/home</code><br> ✓ Home page
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 13th Oct 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/social-login</code><br> ✓ Social login (Google, Apple, Facebook)
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 5th Oct 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /product/available-product-details</code><br> ✓ filter options available data
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 2nd Oct 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-danger">Changes</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /address/add-address</code><br> ✓ Add Address
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /address/address-list</code><br> ✓ Lists of Address
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 26th Sep 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/send-otp-phone</code><br> ✓ Send OTP to phone number
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/phoneVerifyOTP</code><br> ✓ Verify phone OTP
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 23th Sep 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>DELETE /cart/cart-items/{itemId}</code><br> ✓ Remove items from cart
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /cart/checkout</code><br> ✓ Checkout
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 22th Sep 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /product/listing</code><br> ✓ All products list
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>DELETE /product/delete-product-image/{imageId}</code><br> ✓ Delete products image
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /items/items-listing</code><br> ✓ Quick sell items list
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /items/delete-image/{imageId}</code><br> ✓ Delete items image
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 19th Sep 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /home-page/home</code><br> ✓ Home Page
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /home-page/search</code><br> ✓ Search items
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /home-page/price-listing</code><br> ✓ Product price listing
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 18th Sep 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-danger">Changes</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /category/sub-category-list/{categoryId}</code><br> ✓ Get sub-category list
+                                with sub-subCategory
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 11th Sep 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /items/add-items</code><br> ✓ add items
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /items/items-listing</code><br> ✓ quick sell all items list
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>PUT /edit-item/{itemId}</code><br> ✓ Edit items
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 9th Sep 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /contact-support</code><br> ✓ Customer contact-support
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 5th Sep 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /stripe/new-card</code><br> ✓ Create card
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /stripe/card-list</code><br> ✓ Cards Listing
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /stripe/setDefault-card/{cardId}</code><br> ✓ Set default card
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /stripe/edit-card/{cardId}</code><br> ✓ Edit Card
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>DELETE /stripe/delete-card/{cardId}</code><br> ✓ Delete Card
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 1st Sep 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /address/add-address</code><br> ✓ Add Address
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>PUT /address/edit-address/{addressId}</code><br> ✓ Edit Address
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>DELETE /address/delete-address/{addressId}</code><br> ✓ Delete Address
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /address/address-list</code><br> ✓ Lists of Address
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 31th Aug 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /cart/add-to-cart/{productId}</code><br> ✓ Add to Cart
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /cart/cart-items</code><br> ✓ Get Cart Items
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 30th Aug 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /product/add-products</code><br> ✓ Add Products
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /product/apply-filter</code><br> ✓ Apply filters
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 29th Aug 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /category/category-listing</code><br> ✓ category-listing
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /category/sub-category/{categoryId}</code><br> ✓ Get sub-category List
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /category/sub-subcategory/{subCategoryId}</code><br> ✓ Get sub-sub-category
+                                List
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 23th Aug 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>GET /users</code><br> ✓ Get users Profile details
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /users</code><br> ✓ Update users profile
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 10th Aug 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/logout</code><br> ✓ Logout
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/forgot-password</code><br> ✓ Forgot Password
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/change-password</code><br> ✓ Change Password
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /fcm/token-register</code><br> ✓ Register Token
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /fcm/send-push</code><br> ✓ Send push notification Testing
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row d-flex">
+                    <div class="col-lg-2">
+                        <h5 class="mt-4"><b> 9th Aug 2023 </b></h5>
+                    </div>
+                    <div class="col-lg-10 saprater">
+                        <h6 class="mt-4"> <span class="p-2 bg-light shadow rounded text-success">Version 1.0</span>
+                        </h6>
+                        <span class="badge badge-success">New Additions</span>
+                        <ul class="mt-2">
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/send-otp-email</code><br> ✓ OTP send to Email Address
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/emailVerifyOTP</code><br> ✓ Email OTP verification
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/Register</code><br> ✓ Register
+                            </li>
+                            <li class="text-muted ml-3 mb-2">
+                                <code>POST /auth/login</code><br> ✓ Login
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

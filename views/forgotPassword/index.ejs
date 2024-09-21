@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en-US">
+
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <title>Reset Password Email Template</title>
+    <meta name="description" content="Reset Password Email Template.">
+    <style type="text/css">
+    	body{
+        font-family: 'IBM Plex Sans';
+        }
+        a:hover {
+            text-decoration: underline !important;
+            font-family: 'IBM Plex Sans';
+        }
+    </style>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body marginheight="0" topmargin="0" marginwidth="0" style="margin: 0px; background-color: #ffffff;" leftmargin="0">
+
+    <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8">
+        <tr>
+            <td>
+                <table style="background-color: #ffffff; max-width:670px;  margin:0 auto;" width="100%" border="0"
+                    align="center" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="height:80px;">&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <td style="height:20px;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table width="95%" border="0" align="center" cellpadding="0" cellspacing="0"
+                                style="max-width:670px;background:#ECEFFD
+                                ; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);-moz-box-shadow:0 6px 18px 0 rgba(0,0,0,.06);box-shadow:0 6px 18px 0 rgba(0,0,0,.06);">
+                                <tr>
+                                    <td style="height:40px;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center; padding-bottom: 30px;">
+                                        <img height="130px"
+                                            src="<%= logo %>"
+                                            title="iRoid" alt="Harage-Refurbished-Ecommerce">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:0 35px;">
+                                        <h1
+                                            style="color:#3A3A3A; font-weight:bold; font-weight:500; margin-bottom:10px;font-size:32px;">
+                                            You have
+                                            requested to reset your password</h <span style="display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #cecece; width:100px;margin-bottom:10px;">
+                                            </span>
+                                            <p
+                                                style="color:#3A3A3A; font-size:15px;line-height:24px; margin-bottom:10px;">
+                                                We cannot simply send you your old password. A unique link to reset your
+                                                password has been generated for you. To reset your password, click the
+                                                following link and follow the instructions.
+                                            </p>
+                                            <a href="<%= link %>" target="_blank"
+                                                style="background:black;text-decoration:none !important; font-weight:600; margin-top:22px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;margin-bottom:22px;">Reset
+                                                Password</a>
+
+                                            <p style="color:#000; font-size:15px;line-height:24px; margin:0;">
+                                                Here is your One Reset Password Link.
+                                            </p>
+                                            <p style="color:#000; font-size:15px;line-height:24px; margin:0;">
+                                                It will be expire in 5 minutes.
+                                            </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="height:40px;">&nbsp;</td>
+                                </tr>
+                            </table>
+                        </td>
+                    <tr>
+                        <td style="height:20px;">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center;">
+                            <p
+                                style="font-size:14px; color:rgba(69, 80, 86, 0.7411764705882353); line-height:18px; margin:0 0 0;">
+                                &copy; <strong>
+                                    <%= APP_NAME %>
+                                </strong></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="height:80px;">&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

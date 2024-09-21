@@ -1,0 +1,4107 @@
+openapi: "3.0.2"
+info:
+  title: HARAGE-REFURBISHED-ECOMMERCE-APP
+  version: "1.0.0"
+
+components:
+  # Authentication using bearer token
+  securitySchemes:
+    bearerAuth:
+      description: "#### Example: Bearer [TOKEN]"
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Register:
+      type: object
+      properties:
+        fullName:
+          type: string
+          example: rutvik makvana
+        email:
+          type: string
+          example: rutvik@mailinator.com
+        countryCode:
+          type: string
+          example: "+91"
+        phone:
+          type: string
+          example: 1234567890
+        password:
+          type: string
+          example: abcd@123
+        confirmPassword:
+          type: string
+          example: abcd@123
+      required:
+        - fullName
+        - email
+        - countryCode
+        - phone
+        - password
+        - confirmPassword
+
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: rutvik@mailinator.com
+        password:
+          type: string
+          example: abcd@123
+      required:
+        - email
+        - password
+
+  # Response message
+  responses:
+    Success:
+      description: |
+        - success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: success
+
+    UnprocessableEntity:
+      description: |
+        - Unprocessable Entity
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: validation error
+
+    ConflictError:
+      description: |
+        - ConflictError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: conflict error
+
+    BadRequestError:
+      description: |
+        - bad request error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: bad request error
+
+    UnauthorizedError:
+      description: |
+        - Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthorized
+
+    NotFoundError:
+      description: |
+        - NotFoundError
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Not Found
+
+paths:
+  /auth/send-otp-email:
+    post:
+      summary: OTP send to the Email address
+      description: |
+        - OTP send email
+      deprecated: true
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: rutvik@mailinator.com
+              required:
+                - email
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /auth/emailVerifyOTP:
+    post:
+      summary: Email OTP verification
+      description: |
+        - OTP verification
+      deprecated: true
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: rutvik@mailinator.com
+                otp:
+                  type: integer
+                  example: 1234
+              required:
+                - email
+                - otp
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /auth/send-otp-phone:
+    post:
+      summary: Send OTP to mobile number
+      description: |
+        - Send OTP
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: rutvik@mailinator.com
+                countryCode:
+                  type: string
+                  example: "+974"
+                phone:
+                  type: string
+                  example: 72799880
+              required:
+                - countryCode
+                - phone
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "409":
+          $ref: "#/components/responses/ConflictError"
+
+  /auth/phoneVerifyOTP:
+    post:
+      summary: Verify phone OTP
+      description: |
+        - Verify OTP
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                countryCode:
+                  type: string
+                  example: "+974"
+                phone:
+                  type: string
+                  example: "72799880"
+                otp:
+                  type: number
+                  example: 1111
+              required:
+                - countryCode
+                - phone
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "409":
+          $ref: "#/components/responses/ConflictError"
+
+  /auth/register:
+    post:
+      summary: Register
+      description: |
+        - User registration
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                  example: rutvik makvana
+                email:
+                  type: string
+                  example: rutvik@mailinator.com
+                countryCode:
+                  type: string
+                  example: "+91"
+                phone:
+                  type: string
+                  example: 1234567890
+                password:
+                  type: string
+                  example: abcd@123
+                confirmPassword:
+                  type: string
+                  example: abcd@123
+
+              required:
+                - fullName
+                - email
+                - countryCode
+                - phone
+                - password
+                - confirmPassword
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "409":
+          $ref: "#/components/responses/ConflictError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /auth/login:
+    post:
+      summary: Login users
+      description: |
+        - login.
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: rutvik@mailinator.com
+                password:
+                  type: string
+                  example: abcd@123
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /auth/logout:
+    post:
+      summary: Logout
+      description: |
+        - logout from this device.
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceId:
+                  type: string
+                  example: SP1A.210812.016
+              required:
+                - deviceId
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /auth/forgot-password:
+    post:
+      summary: Forgot password
+      description: |
+        - forgot password
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: rutvik@mailinator.com
+              required:
+                - email
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /auth/change-password:
+    post:
+      summary: Change Password
+      description: |
+        - User can your change password
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                currentPassword:
+                  type: string
+                  example: abcd@111
+                newPassword:
+                  type: string
+                  example: abcd@222
+                confirmNewPassword:
+                  type: string
+                  example: abcd@222
+
+              required:
+                - currentPassword
+                - newPassword
+                - confirmNewPassword
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "409":
+          $ref: "#/components/responses/ConflictError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /auth/social-login:
+    post:
+      summary: Social login
+      description: |
+        - provider - 0 -> Google
+        - provider - 1 -> Apple
+        - provider - 2 -> Facebook
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                provider:
+                  type: string
+                  example: 0
+                token:
+                  type: string
+                  example: eyJhbGciOiJSUzI1NiIsImtpZCI6IjdkMzM0NDk3NTA2YWNiNzRjZGVlZGFhNjYxODRkMTU1NDdmODM2OTMiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiIxMDQ3OTA0MDk2NDQ0LTBvNjVqYXJtOWNyMDd0bGFwbDhyZGRzdmthZWZzYTlkLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMTA0NzkwNDA5NjQ0NC0wbzY1amFybTljcjA3dGxhcGw4cmRkc3ZrYWVmc2E5ZC5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsInN1YiI6IjExMTkyNTg2MTU1MzYxNDQ2OTcxOSIsImVtYWlsIjoiaXJvaWQudGVzdDFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJ5b210eTZ3cTJ4MWs3NlhzcXFVMjF3IiwibmFtZSI6ImlSb2lkIERldiIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BQ2c4b2NKUkVIZU5OQms5U3loOWtfNnBJdHpPVlJtYk1abS0xR0p4dVRuRG1nZnJkZDQ9czk2LWMiLCJnaXZlbl9uYW1lIjoiaVJvaWQiLCJmYW1pbHlfbmFtZSI6IkRldiIsImxvY2FsZSI6ImVuLUdCIiwiaWF0IjoxNjk3NDMyNDY5LCJleHAiOjE2OTc0MzYwNjl9.CKImePQvx3NbIPPeifyYfwweaoOc-pTCekcArbYpxGWiPEzStlhJIcQBXeP7XQq-5RRhqy_4_SYrciH2enwZx23TK7jkt0gkZ34fRRDIB7GVbrWnyn1VdQAbdBa_8d2ZcTmHItC_yDxNTbbBY379QjKXWc8-IPKQfJR2Afo8bQir1gZ-nghue4SxSO4vZ76-jvqf8MzVbvnCAsccaBRgm0VcJ56Sfqk2-j4RWcaPC9TrWlN7Cm7UgvwkDw-dHIWv_nhTrltcmc5Q-p7i8EG1fdkdQyrXBiXj8l0vmkguAbl82wAvB68-Tkj5UhK4anXGfYc_51Aa8hNbPVb3s2wNuQ
+              required:
+                - token
+                - providerId
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "409":
+          $ref: "#/components/responses/ConflictError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /auth/refresh-token:
+    post:
+      summary: Refresh Token
+      description: |
+        - Refresh Token
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  example: eyJhbGciOiJSUzI1NiIsImtpZCI6I51Aa8hNbPVb3s2wNuQ
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /customer-check-version:
+    post:
+      summary: Check customer app version
+      description: |
+        | status        | meaning           |
+        | ------------- |:-------------:|
+        | ***Recommended Update***      | 2 |
+        | ***Force Update***      | 1 |
+        | ***Up to date***      | 0 |
+        | ***role***      | 0 - Customer |
+      tags:
+        - Customer App
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  enum: [iOS, Android]
+                version:
+                  type: string
+                  example: "1.0.0"
+                role:
+                  type: integer
+                  example: 0
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Your app is up to date
+                  status:
+                    type: integer
+                    example: 0
+                  appLink:
+                    type: string
+                    example: ""
+
+  # Users Profile
+  /users:
+    get:
+      summary: Get users profile details
+      security:
+        - bearerAuth: []
+      tags:
+        - Users Profile
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+    put:
+      summary: Update users profile
+      tags:
+        - Users Profile
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                  example: rutvik makvana
+                email:
+                  type: string
+                  format: email
+                  example: rutvik@mailinator.com
+                countryCode:
+                  type: string
+                  example: "+91"
+                phone:
+                  type: string
+                  example: 1234567890
+                profileImage:
+                  type: string
+                  format: binary
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  #Home Page
+  /home-page/home:
+    get:
+      summary: Home page
+      tags:
+        - Home Page
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /home-page/search:
+    get:
+      summary: search Items
+      tags:
+        - Home Page
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: search
+          schema:
+            type: string
+            example: Redmi
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /home-page/price-listing:
+    get:
+      summary: Products price listing
+      description: Under QAR 1000 => Price under 1000   ||
+        Under QAR 99 => Price under 99
+      tags:
+        - Home Page
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: key
+          required: true
+          schema:
+            type: string
+            enum:
+              - Under QAR 1000
+              - Under QAR 99
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  #Category
+  /category/category-listing:
+    get:
+      summary: Categories listing
+      tags:
+        - Category
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /category/sub-category/{categoryId}:
+    get:
+      summary: get sub category
+      deprecated: true
+      tags:
+        - Category
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+            example: 63bd4dcff9e5e2f0107cb2f6
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /category/sub-subcategory/{subCategoryId}:
+    get:
+      summary: get sub-sub-category
+      deprecated: true
+      tags:
+        - Category
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: subCategoryId
+          required: true
+          schema:
+            type: string
+            example: 63bd4dcff9e5e2f0107cb2f6
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /category/sub-category-list/{categoryId}:
+    get:
+      summary: get sub category list
+      tags:
+        - Category
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: categoryId
+          required: true
+          schema:
+            type: string
+            example: 63bd4dcff9e5e2f0107cb2f6
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  # FCM Token register
+  /fcm/token-register:
+    post:
+      deprecated: false
+      description: Register device token.
+      summary: Register token
+
+      tags:
+        - Customer FCM TOKEN
+      security:
+        - bearerAuth: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: def5020075819e4748adefe1f860566c3b41437f2b7e396db025b4d384e6b5db5911a3cfc22
+                deviceId:
+                  type: string
+                  example: SP1A.210812.016
+                deviceType:
+                  type: string
+                  example: Android
+              required:
+                - token
+                - deviceId
+                - deviceType
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /fcm/send-notification:
+    post:
+      deprecated: false
+      summary: Send push notification testing
+
+      tags:
+        - Customer FCM TOKEN
+      security:
+        - bearerAuth: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: cRsDia88QKKUta3kCVq8LH:APA91bHEgyFHXM1K-7biA82LjE5-wIim5xArN6gAF78XMvu6cqwEAQjJZfcZkRNUyjvKYuzAoNsYwUX9EI6t_EMrCHynOIou7peEaZqxw1s9OJQ3JADk4C6X_Q0cnB7txitGTDQKQ-YL
+                title:
+                  type: string
+                  example: Hello
+                message:
+                  type: string
+                  example: How are you?
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /product/add-products:
+    post:
+      summary: add products
+      description: |
+        - add products
+      security:
+        - bearerAuth: []
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                  example: 653603c2fc40e778a8341f99
+                subCategoryId:
+                  type: string
+                  example: 653603c2fc40e778a8341f9b
+                subSubCategoryId:
+                  type: string
+                  example: 653603c2fc40e778a8341f9d
+                image:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                productTitle:
+                  type: string
+                  example: Redmi Note 9
+                productDescription:
+                  type: string
+                  example: mbnhjhjgjfhjhjhgjhhjfhgjhfjhghfjghjhfgjh
+                brand:
+                  type: string
+                  example: Redmi
+                modelName:
+                  type: string
+                  example: Note 9
+                price:
+                  type: integer
+                  example: 90
+                condition:
+                  type: string
+                  example: New
+                warranty:
+                  type: string
+                  example: 01/01/2023
+                additionalFeatures:
+                  type: string
+                  example: smart and fast working
+                rating:
+                  type: string
+                  example: 4.5
+                shippingAndDeliveryTime:
+                  type: string
+                displayTechnology:
+                  type: string
+                resolution:
+                  type: string
+                smartFeatures:
+                  type: string
+                connectivity:
+                  type: string
+                type:
+                  type: string
+                material:
+                  type: string
+                compatibility:
+                  type: string
+                maximumTvSize:
+                  type: string
+                maximumWeightCapacity:
+                  type: string
+                mountType:
+                  type: string
+                cableLength:
+                  type: string
+                cableType:
+                  type: string
+                connectorType:
+                  type: string
+                compatibleBrands:
+                  type: string
+                compatibleDevices:
+                  type: string
+                color:
+                  type: string
+                noiseCancelling:
+                  type: boolean
+                  enum:
+                    - true
+                    - false
+                batteryLife:
+                  type: string
+                noiseCancellingTechnology:
+                  type: string
+                voiceAssistantCompatibility:
+                  type: string
+                waterproofRating:
+                  type: string
+                soundQuality:
+                  type: string
+                subWoofer:
+                  type: string
+                mountingOptions:
+                  type: string
+                numberOfSpeakers:
+                  type: string
+                audioFormats:
+                  type: string
+                speakerConfiguration:
+                  type: string
+                storageCapacity:
+                  type: string
+                screenSize:
+                  type: string
+                playbackFeatures:
+                  type: string
+                recordingCapacity:
+                  type: string
+                recordingQuality:
+                  type: string
+                displayScreen:
+                  type: string
+                microphoneType:
+                  type: string
+                closureType:
+                  type: string
+                interiorDesign:
+                  type: string
+                dimensions:
+                  type: string
+                weight:
+                  type: string
+                earPadShape:
+                  type: string
+                thickShape:
+                  type: string
+                diameter:
+                  type: string
+                packageContents:
+                  type: string
+
+              required:
+                - image
+                - productTitle
+                - productDescription
+                - brand
+                - modelName
+                - price
+                - condition
+                - warranty
+                - additionalFeatures
+                - rating
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /product/product-listing:
+    get:
+      summary: All Products list
+      tags:
+        - Product
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /product/findProducts:
+    get:
+      summary: Get all products list based on sub-category and sub-sub-category
+      tags:
+        - Product
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: subCategoryId
+          schema:
+            type: string
+            example: 64feea624b9c4a61782a15e7
+        - in: query
+          name: subSubCategoryId
+          schema:
+            type: string
+            example: 64feea624b9c4a61782a15e7
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /product/product-listing/{productId}:
+    get:
+      summary: get one product details
+      description: |
+        - get one product details
+      tags:
+        - Product
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: categoryId
+          schema:
+            type: string
+            example: 65a60a0cdf39050eaba193cb
+        - in: query
+          name: subCategoryId
+          schema:
+            type: string
+        - in: query
+          name: subSubCategoryId
+          schema:
+            type: string
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+            example: 659e45cbd2d793f9ca90420b
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /product/available-product-details:
+    get:
+      summary: filter options available data
+      description: Enter  this selectedField only
+        - brand
+        - screenSize
+        - condition
+      tags:
+        - Product
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: categoryId
+          schema:
+            type: string
+            example: 659b83523d83addfe3d68f67
+        - in: query
+          name: subCategoryId
+          schema:
+            type: string
+        - in: query
+          name: subSubCategoryId
+          schema:
+            type: string
+        - in: query
+          name: selectedField
+          schema:
+            type: string
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /product/apply-filter:
+    post:
+      summary: Apply filters to get a list of products
+      description: |
+        ```
+        - anyField : ["LG", "Samsung"]
+          
+
+        - sortBy 1 -> Low to High
+        - sortBy 2 -> High to Low
+        - sortBy 3 -> New to Old
+        - sortBy 4 -> Old to New
+        ```
+      security:
+        - bearerAuth: []
+      tags:
+        - Product
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                brand:
+                  type: string
+                  example: ""
+                productType:
+                  type: string
+                  example: ""
+                operatingSystem:
+                  type: string
+                  example: ""
+                screenSize:
+                  type: string
+                  example: ""
+                cameraResolution:
+                  type: string
+                  example: ""
+                storageCapacity:
+                  type: string
+                  example: ""
+                color:
+                  type: string
+                  example: ""
+                availability:
+                  type: string
+                  example: ""
+                features:
+                  type: string
+                  example: ""
+                processorType:
+                  type: string
+                  example: ""
+                batteryLife:
+                  type: string
+                  example: ""
+                rating:
+                  type: string
+                  example: ""
+                condition:
+                  type: string
+                  example: ""
+                model:
+                  type: string
+                  example: ""
+                screenType:
+                  type: string
+                  example: ""
+                resolution:
+                  type: string
+                  example: ""
+                warrantyStatus:
+                  type: string
+                  example: ""
+
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: categoryId
+          schema:
+            type: string
+            example: 65a60a0cdf39050eaba193cb
+        - in: query
+          name: subCategoryId
+          schema:
+            type: string
+        - in: query
+          name: subSubCategoryId
+          schema:
+            type: string
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /items/add-items:
+    post:
+      summary: add items
+      description: |
+        - add items in quick sell
+      security:
+        - bearerAuth: []
+      tags:
+        - Quick Sell
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                  example: 64f0165ffda9d5afbade0e9a
+                subCategoryId:
+                  type: string
+                  example: 64f0165ffda9d5afbade0e9a
+                subSubCategoryId:
+                  type: string
+                  example: 64fec0be141493d0bbc3b292
+                image:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                productName:
+                  type: string
+                  example: iPhone 14 Pro Max
+                brand:
+                  type: string
+                  example: Apple
+                otherBrand:
+                  type: string
+                  example: Apple
+                model:
+                  type: string
+                  example: Boat
+                conditions:
+                  type: string
+                  example: Like New
+                price:
+                  type: string
+                  example: 786
+                priceFlexibility:
+                  type: string
+                  example: Negotiable
+                warrantyStatus:
+                  type: string
+                  example: Under Warranty
+                additionalDetails:
+                  type: string
+                  example: New additional details
+                features:
+                  type: array
+                connectivityFeatures:
+                  type: array
+                smartTvFeatures:
+                  type: array
+                coolingCapacity:
+                  type: string
+                  example: aa
+                energyEfficiency:
+                  type: string
+                  example: Less than 1 years
+                screenSize:
+                  type: string
+                  example: Less than 6 years
+                otherScreenSize:
+                  type: string
+                  example: Up to half
+                storage:
+                  type: string
+                  example: 64Gb
+                otherStorage:
+                  type: string
+                  example: 128Gb
+                ram:
+                  type: string
+                  example: aa
+                otherRam:
+                  type: string
+                  example: Headphones
+                batteryLife:
+                  type: string
+                  example: JBL
+                type:
+                  type: string
+                  example: Good
+                otherType:
+                  type: string
+                  example: Good
+                color:
+                  type: string
+                  example: Good
+                blenderCapacity:
+                  type: string
+                  example: Good
+                powerRating:
+                  type: string
+                  example: Good
+                compatibility:
+                  type: string
+                  example: Good
+                displayType:
+                  type: string
+                  example: Good
+                otherDisplayType:
+                  type: string
+                  example: Good
+                cuffSize:
+                  type: string
+                  example: Good
+                powerSource:
+                  type: string
+                  example: Good
+                otherPowerSource:
+                  type: string
+                  example: high
+                feature:
+                  type: string
+                  example: Good
+                material:
+                  type: string
+                  example: Good
+                otherMaterial:
+                  type: string
+                  example: Good
+                size:
+                  type: string
+                  example: 5 meter
+                otherSize:
+                  type: string
+                  example: 10 meter
+                focalLength:
+                  type: string
+                  example: Good
+                aperture:
+                  type: string
+                  example: Good
+                maxLoadCapacity:
+                  type: string
+                  example: Good
+                megapixels:
+                  type: string
+                  example: Good
+                sensorSize:
+                  type: string
+                  example: Good
+                lensMount:
+                  type: string
+                  example: Good
+                compatibleBrand:
+                  type: string
+                  example: Good
+                connectorType:
+                  type: string
+                  example: Good
+                otherConnectorType:
+                  type: string
+                  example: Good
+                outputSpecification:
+                  type: string
+                  example: Good
+                processor:
+                  type: string
+                  example: Good
+                otherProcessor:
+                  type: string
+                  example: Good
+                graphicsCard:
+                  type: string
+                  example: Good
+                otherGraphicsCard:
+                  type: string
+                  example: Good
+                operatingSystem:
+                  type: string
+                  example: Good
+                otherOperatingSystem:
+                  type: string
+                  example: Good
+                memoryCapacity:
+                  type: string
+                  example: Good
+                recordingQuality:
+                  type: string
+                  example: Good
+                additionalFeatures:
+                  type: array
+                capacity:
+                  type: string
+                  example: Good
+                otherCapacity:
+                  type: string
+                  example: Good
+                connectionType:
+                  type: string
+                  example: Good
+                otherConnectionType:
+                  type: string
+                  example: Good
+                formFactor:
+                  type: string
+                  example: Good
+                otherFormFactor:
+                  type: string
+                  example: Good
+                recommendedSkinType:
+                  type: string
+                  example: Good
+                otherRecommendedSkinType:
+                  type: string
+                  example: Good
+                cleaningBrushType:
+                  type: string
+                  example: Good
+                otherCleaningBrushType:
+                  type: string
+                  example: Good
+                waterResistance:
+                  type: string
+                  example: Good
+                chargingType:
+                  type: string
+                  example: Good
+                activityTracking:
+                  type: string
+                  example: Good
+                otherActivityTracking:
+                  type: string
+                  example: Good
+                resolution:
+                  type: string
+                  example: Good
+                storageCapacity:
+                  type: string
+                  example: Good
+                otherStorageCapacity:
+                  type: string
+                  example: Good
+                includedAccessories:
+                  type: string
+                  example: Good
+                compatiblePlatform:
+                  type: string
+                  example: Good
+                otherCompatiblePlatform:
+                  type: string
+                  example: Good
+                switchType:
+                  type: string
+                  example: Good
+                backlighting:
+                  type: string
+                  example: Good
+                keyFeatures:
+                  type: string
+                  example: Good
+                refreshRate:
+                  type: string
+                  example: Good
+                otherRefreshRate:
+                  type: string
+                  example: Good
+                dpi:
+                  type: string
+                  example: Good
+                connectivity:
+                  type: string
+                  example: Good
+                heatSettings:
+                  type: string
+                  example: Good
+                speedSettings:
+                  type: string
+                  example: Good
+                attachments:
+                  type: string
+                  example: Good
+                cableLength:
+                  type: string
+                  example: Good
+                hdmiType:
+                  type: string
+                  example: Good
+                otherHdmiType:
+                  type: string
+                  example: Good
+                compatibleHeadphoneModels:
+                  type: string
+                  example: Good
+                shavingSystem:
+                  type: string
+                  example: Good
+                otherShavingSystem:
+                  type: string
+                  example: Good
+                cleaningSystem:
+                  type: string
+                  example: Good
+                compatibilityAccessories:
+                  type: string
+                  example: Good
+                trackingMetrics:
+                  type: string
+                  example: Good
+                voiceAssistance:
+                  type: string
+                  example: Good
+                otherVoiceAssistance:
+                  type: string
+                  example: Good
+                colorTemperature:
+                  type: string
+                  example: Good
+                brightness:
+                  type: string
+                  example: Good
+                smartFeatures:
+                  type: string
+                  example: Good
+                installationType:
+                  type: string
+                  example: Good
+                measurementMetrics:
+                  type: string
+                  example: Good
+                maxWeightCapacity:
+                  type: string
+                  example: Good
+                indoorOutdoor:
+                  type: string
+                  example: Good
+                compatibleOperatingSystem:
+                  type: string
+                  example: Good
+                otherCompatibleOperatingSystem:
+                  type: string
+                  example: Good
+                brandMaterial:
+                  type: string
+                  example: Good
+                otherBrandMaterial:
+                  type: string
+                  example: Good
+                numberOfSlices:
+                  type: string
+                  example: Good
+                mountType:
+                  type: string
+                  example: Good
+                otherMountType:
+                  type: string
+                  example: Good
+                compatibleTvSize:
+                  type: string
+                  example: Good
+                weightCapacity:
+                  type: string
+                  example: Good
+                screenType:
+                  type: string
+                  example: Good
+                otherScreenType:
+                  type: string
+                  example: Good
+                remoteType:
+                  type: string
+                  example: A.C
+                otherRemoteType:
+                  type: string
+                  example: Television
+
+              required:
+                - image
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /items/items-listing:
+    get:
+      summary: quick sell all items list
+      tags:
+        - Quick Sell
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /items/item-details/{itemId}:
+    get:
+      summary: get one item details
+      description: |
+        - get one item details
+      tags:
+        - Quick Sell
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+            example: 64feea624b9c4a61782a15e7
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /items/edit-item/{itemId}:
+    put:
+      summary: Edit Item
+      description: |
+        - Edit Item
+      tags:
+        - Quick Sell
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+            example: 64feea624b9c4a61782a15e7
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                productName:
+                  type: string
+                  example: iPhone 14 Pro Max
+                brand:
+                  type: string
+                  example: Apple
+                otherBrand:
+                  type: string
+                  example: Apple
+                model:
+                  type: string
+                  example: Boat
+                conditions:
+                  type: string
+                  example: Like New
+                price:
+                  type: string
+                  example: 786
+                priceFlexibility:
+                  type: string
+                  example: Negotiable
+                warrantyStatus:
+                  type: string
+                  example: Under Warranty
+                additionalDetails:
+                  type: string
+                  example: New additional details
+                features:
+                  type: array
+                connectivityFeatures:
+                  type: array
+                smartTvFeatures:
+                  type: array
+                coolingCapacity:
+                  type: string
+                  example: aa
+                energyEfficiency:
+                  type: string
+                  example: Less than 1 years
+                screenSize:
+                  type: string
+                  example: Less than 6 years
+                otherScreenSize:
+                  type: string
+                  example: Up to half
+                storage:
+                  type: string
+                  example: Sound better
+                otherStorage:
+                  type: string
+                  example: 128Gb
+                ram:
+                  type: string
+                  example: aa
+                otherRam:
+                  type: string
+                  example: Headphones
+                batteryLife:
+                  type: string
+                  example: JBL
+                type:
+                  type: string
+                  example: Good
+                otherType:
+                  type: string
+                  example: Good
+                color:
+                  type: string
+                  example: Good
+                blenderCapacity:
+                  type: string
+                  example: Good
+                powerRating:
+                  type: string
+                  example: Good
+                compatibility:
+                  type: string
+                  example: Good
+                displayType:
+                  type: string
+                  example: Good
+                otherDisplayType:
+                  type: string
+                  example: Good
+                cuffSize:
+                  type: string
+                  example: Good
+                powerSource:
+                  type: string
+                  example: Good
+                otherPowerSource:
+                  type: string
+                  example: high
+                feature:
+                  type: string
+                  example: Good
+                material:
+                  type: string
+                  example: Good
+                otherMaterial:
+                  type: string
+                  example: Good
+                size:
+                  type: string
+                  example: Good
+                otherSize:
+                  type: string
+                  example: 10 meter
+                focalLength:
+                  type: string
+                  example: Good
+                aperture:
+                  type: string
+                  example: Good
+                maxLoadCapacity:
+                  type: string
+                  example: Good
+                megapixels:
+                  type: string
+                  example: Good
+                sensorSize:
+                  type: string
+                  example: Good
+                lensMount:
+                  type: string
+                  example: Good
+                compatibleBrand:
+                  type: string
+                  example: Good
+                connectorType:
+                  type: string
+                  example: Good
+                otherConnectorType:
+                  type: string
+                  example: Good
+                outputSpecification:
+                  type: string
+                  example: Good
+                processor:
+                  type: string
+                  example: Good
+                otherProcessor:
+                  type: string
+                  example: Good
+                graphicsCard:
+                  type: string
+                  example: Good
+                otherGraphicsCard:
+                  type: string
+                  example: Good
+                operatingSystem:
+                  type: string
+                  example: Good
+                otherOperatingSystem:
+                  type: string
+                  example: Good
+                memoryCapacity:
+                  type: string
+                  example: Good
+                recordingQuality:
+                  type: string
+                  example: Good
+                additionalFeatures:
+                  type: array
+                capacity:
+                  type: string
+                  example: Good
+                otherCapacity:
+                  type: string
+                  example: Good
+                connectionType:
+                  type: string
+                  example: Good
+                otherConnectionType:
+                  type: string
+                  example: Good
+                formFactor:
+                  type: string
+                  example: Good
+                otherFormFactor:
+                  type: string
+                  example: Good
+                recommendedSkinType:
+                  type: string
+                  example: Good
+                otherRecommendedSkinType:
+                  type: string
+                  example: Good
+                cleaningBrushType:
+                  type: string
+                  example: Good
+                otherCleaningBrushType:
+                  type: string
+                  example: Good
+                waterResistance:
+                  type: string
+                  example: Good
+                chargingType:
+                  type: string
+                  example: Good
+                activityTracking:
+                  type: string
+                  example: Good
+                otherActivityTracking:
+                  type: string
+                  example: Good
+                resolution:
+                  type: string
+                  example: Good
+                storageCapacity:
+                  type: string
+                  example: Good
+                otherStorageCapacity:
+                  type: string
+                  example: Good
+                includedAccessories:
+                  type: string
+                  example: Good
+                compatiblePlatform:
+                  type: string
+                  example: Good
+                otherCompatiblePlatform:
+                  type: string
+                  example: Good
+                switchType:
+                  type: string
+                  example: Good
+                backlighting:
+                  type: string
+                  example: Good
+                keyFeatures:
+                  type: string
+                  example: Good
+                refreshRate:
+                  type: string
+                  example: Good
+                otherRefreshRate:
+                  type: string
+                  example: Good
+                dpi:
+                  type: string
+                  example: Good
+                connectivity:
+                  type: string
+                  example: Good
+                heatSettings:
+                  type: string
+                  example: Good
+                speedSettings:
+                  type: string
+                  example: Good
+                attachments:
+                  type: string
+                  example: Good
+                cableLength:
+                  type: string
+                  example: Good
+                hdmiType:
+                  type: string
+                  example: Good
+                otherHdmiType:
+                  type: string
+                  example: Good
+                compatibleHeadphoneModels:
+                  type: string
+                  example: Good
+                shavingSystem:
+                  type: string
+                  example: Good
+                otherShavingSystem:
+                  type: string
+                  example: Good
+                cleaningSystem:
+                  type: string
+                  example: Good
+                compatibilityAccessories:
+                  type: string
+                  example: Good
+                trackingMetrics:
+                  type: string
+                  example: Good
+                voiceAssistance:
+                  type: string
+                  example: Good
+                otherVoiceAssistance:
+                  type: string
+                  example: Good
+                colorTemperature:
+                  type: string
+                  example: Good
+                brightness:
+                  type: string
+                  example: Good
+                smartFeatures:
+                  type: string
+                  example: Good
+                installationType:
+                  type: string
+                  example: Good
+                measurementMetrics:
+                  type: string
+                  example: Good
+                maxWeightCapacity:
+                  type: string
+                  example: Good
+                indoorOutdoor:
+                  type: string
+                  example: Good
+                compatibleOperatingSystem:
+                  type: string
+                  example: Good
+                otherCompatibleOperatingSystem:
+                  type: string
+                  example: Good
+                brandMaterial:
+                  type: string
+                  example: Good
+                otherBrandMaterial:
+                  type: string
+                  example: Good
+                numberOfSlices:
+                  type: string
+                  example: Good
+                mountType:
+                  type: string
+                  example: Good
+                otherMountType:
+                  type: string
+                  example: Good
+                compatibleTvSize:
+                  type: string
+                  example: Good
+                weightCapacity:
+                  type: string
+                  example: Good
+                screenType:
+                  type: string
+                  example: Good
+                otherScreenType:
+                  type: string
+                  example: Good
+                remoteType:
+                  type: string
+                  example: A.C
+                otherRemoteType:
+                  type: string
+                  example: Television
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /items/delete-image/{imageId}:
+    delete:
+      summary: Delete image
+      description: |
+        - Delete image
+      tags:
+        - Quick Sell
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: imageId
+          required: true
+          schema:
+            type: array
+            example: 63bd4dcff9e5e2f0107cb2f6
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /items/delete-item/{itemId}:
+    delete:
+      summary: Delete quick sell item
+      description: |
+        - Delete quick sell item
+      tags:
+        - Quick Sell
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+            example: 63bd4dcff9e5e2f0107cb2f6
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /items/send-now/{addressId}:
+    post:
+      summary: Send notification to admin for sell items
+      security:
+        - bearerAuth: []
+      tags:
+        - Quick Sell
+
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          schema:
+            type: string
+            example: 651bf8088d171336de78d6a6
+        - in: query
+          name: mediumOfCommunication
+          required: true
+          schema:
+            type: array
+            example: Telegram
+        - in: query
+          name: languageOfCommunication
+          required: true
+          schema:
+            type: array
+            example: Arabic
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /order-history/sell-items:
+    get:
+      summary: history of sell items
+      description: |
+        **Type :**
+        ```
+        * 0 -> Selling Order History  
+        * 1 -> Buying Order History
+        ```
+        **Buyer Status :**
+
+        ``` 
+        -->  For Cash On Delivery 
+
+        * 1 -> Order Placed
+        * 2 -> Processing
+        * 3 -> Out for Delivery
+        * 4 -> Delivered
+        * 6 -> Cancelled
+        * 7 -> Returned
+        * 8 -> Refunded
+
+        --> For SkipCash
+
+        * 1 -> Order Placed
+        * 2 -> Payment Confirmed
+        * 3 -> Processing
+        * 4 -> Out for Delivery
+        * 5 -> Delivered
+        * 6 -> Cancelled
+        * 7 -> Returned
+        * 8 -> Refunded
+
+
+        --> Buyer product status :- 
+            * 4 -> Delivered
+            * 5 -> Refunded
+            * 6 -> Returned
+       
+        ```
+
+        **Seller Status :**
+        ``` 
+        --> Complete Order Status :- 
+        * 1 -> Submitted
+        * 2 -> Under Review
+        * 3 -> Partial Acceptance
+        * 4 -> Order Rejected
+        * 5 -> Completed
+        * 7 -> Pending for customer confirmation
+
+        --> Particular Order Items status :-
+        * 1 -> Item Submitted
+        * 2 -> Item Under Review
+        * 3 -> Item Accepted
+        * 4 -> Item Rejected
+        * 5 -> Item Completed
+
+        ```
+
+        **Payment Method Status :**
+        ```
+        * 1 -> Cash On Delivery
+        * 2 -> SkipCash
+        ```
+      tags:
+        - Order history
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /order-history/sell-item-details/{orderId}:
+    get:
+      summary: History of selling order in details
+      description: |
+        **Type :**
+        ```
+        * 0 -> Selling Order History  
+        * 1 -> Buying Order History
+        ```
+      tags:
+        - Order history
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 64feea624b9c4a61782a15e7
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /order-history/item-detail-action/{itemId}:
+    get:
+      summary: Selling Order item detail action
+      tags:
+        - Order history
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+            example: 668cd4c08441f5d294b9c299
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /items/price-request:
+    post:
+      summary: Accept / Reject price request
+      description: |
+        ```
+        type: 1 - Accept price request 
+        type: 2 - Reject price request
+             
+        ```
+      security:
+        - bearerAuth: []
+      tags:
+        - Order history
+
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 1
+              - 2
+        - in: query
+          name: orderId
+          schema:
+            type: string
+            example: 666ad4926667cb3827a7653f
+
+        # - in: query
+        #   name: itemId
+        #   schema:
+        #     type: string
+        #     example: 666ad4926667cb3827a7653c
+
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: string
+                  example: [{ itemId: "668cd4c08441f5d294b9c299", price: 199 }, { itemId: "668cd5108441f5d294b9c2b4", price: 70 }]
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /order-history/sell-item-delete/{itemId}:
+    delete:
+      summary: Delete sell items in history list
+      description: |
+        - Delete sell items in history list
+      tags:
+        - Order history
+      deprecated: true
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: itemId
+          required: true
+          schema:
+            type: string
+            example: 63bd4dcff9e5e2f0107cb2f6
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /order-history/invoice/{orderId}:
+    post:
+      summary: Invoice download for your order
+      description: |
+        **Type :**
+        ```
+        * 0 -> Selling invoice 
+        * 1 -> Buying invoice
+        ```
+      tags:
+        - Order history
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 63bd4dcff9e5e2f0107cb2f6
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /return-exchange/:
+    post:
+      summary: Send request for return/Exchange products
+      security:
+        - bearerAuth: []
+      tags:
+        - Order history
+
+      parameters:
+        - in: query
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 667181a5316fa8baf9b9ba9e 
+        - in: query
+          name: productId
+          required: true
+          schema:
+            type: string
+            example: 66754d2128f011186331500c
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                option:
+                  type: string
+                  example: 665ee22e87cc7c15ab09d939
+                reason:
+                  type: string
+                  example: The item doesn't match the website description or photos, leading to unmet expectations.
+                image:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/add-to-cart/{productId}:
+    post:
+      summary: Add to Cart
+      security:
+        - bearerAuth: []
+      tags:
+        - Cart
+
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+            example: 64f6b4d272a2a2063a92f6c9
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/cart-products:
+    get:
+      summary: get cart products
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/cart-products/{productId}:
+    delete:
+      summary: Remove Products from Cart
+      security:
+        - bearerAuth: []
+      tags:
+        - Cart
+
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+            example: 64f0165ffda9d5afbade0e9a
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/buy-now/{productId}:
+    post:
+      summary: Buy now product
+      security:
+        - bearerAuth: []
+      tags:
+        - Cart
+
+      parameters:
+        - in: path
+          name: productId
+          required: true
+          schema:
+            type: string
+            example: 64f0165ffda9d5afbade0e9a
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/checkout:
+    get:
+      summary: checkout
+      description: |
+        **Type :**
+        ```
+        * 0 -> buy now  
+        * 1 -> add To Cart
+        ```
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/checkout/pay-now/{orderId}:
+    post:
+      summary: Payment api for your checkout products
+      description: |
+        **Below is the list of Type for Payment Method**
+        ```
+
+        * 1 -> Cash On Delivery 
+        * 2 -> Skip Cash
+        ```
+        |:-------------:
+        **Payment response**
+        ```
+
+        * 1 -> Cash On Delivery 
+        * 2 -> Skip Cash
+        ```
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 6593cf20d3e5b4efe0c23fec
+        - in: query
+          name: addressId
+          required: true
+          schema:
+            type: string
+            example: 658d609e6568b73eddc89a05
+        - in: query
+          name: paymentMethodId
+          required: true
+          schema:
+            type: string
+            example: 658024b29d02ae56bc87f6d1
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 1
+              - 2
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/order-details/{orderId}:
+    get:
+      summary: Purchase Order details
+      description: product details
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 64f0165ffda9d5afbade0e9a
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/order-products/{orderId}:
+    get:
+      summary: Order Products
+      description: |
+        **Order Products list**
+      tags:
+        - Cart
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 64f0165ffda9d5afbade0e9a
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/track-order:
+    post:
+      summary: Track your order
+
+      description: |
+        ```
+          paymentType 1 - Cash On Delivery
+          paymentType 2 - SkipCash
+        ```
+      security:
+        - bearerAuth: []
+
+      tags:
+        - Cart
+      
+      parameters:
+        - in: query
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 6593cf20d3e5b4efe0c23fec
+        - in: query
+          name: paymentType
+          required: true
+          schema:
+            type: number
+            example: 1
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/cancel-order/{orderId}:
+    post:
+      summary: Cancel order
+      security:
+        - bearerAuth: []
+
+      tags:
+        - Cart
+
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 64f0165ffda9d5afbade0e9a
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /cart/refund/{orderId}:
+    post:
+      summary: Refund order
+      security:
+        - bearerAuth: []
+
+      tags:
+        - Cart
+
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 64f0165ffda9d5afbade0e9a
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /order/review/{orderId}:
+    post:
+      summary: Order Review
+      description: |
+        - write your experience/review for your completed order
+      tags:
+        - Review
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                writeYourExperience:
+                  type: string
+                  example: I recently purchased from start to finish, and the entire buying process and Harage services were smooth and easy.
+      parameters:
+        - in: path
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 6593cf20d3e5b4efe0c23fec
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /report:
+    post:
+      summary: Report Product
+      description: |
+        - Report product
+
+        | type      | Meaning           |
+        | ------------- |:-------------:|
+        | 1 | ***Order report*** |
+        | 2 | ***Product report***  |
+
+      tags:
+        - Report Product
+      security:
+        - bearerAuth: []
+
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: 1
+                orderId:
+                  type: string
+                  example: 6593cf20d3e5b4efe0c23fec
+                productId:
+                  type: string
+                  example: 6593cf20d3e5b4efe0c23fec
+                reportReason:
+                  type: string
+                  example: 6593cf20d3e5b4efe0c23fec
+                reportDescription:
+                  type: string
+                  example: You can report if you haven't received your order within the excepted delivery window.
+                image:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /report/report-return-list:
+    get:
+      summary: Lists of report and return expchange list
+      description: |
+        - Report & Return-exchange list
+
+        | type      | Meaning           |
+        | ------------- |:-------------:|
+        | 1 | ***Report-List*** |
+        | 2 | ***Return-Exchange-List***  |
+      tags:
+        - Report Product
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 1
+              - 2
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /address/add-address:
+    post:
+      summary: Add Address
+      description: |
+        - type - 0 -> Office
+        - type - 1 -> Home
+        - type - 2 -> Apartment
+      tags:
+        - Address
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: 0
+                buildingName:
+                  type: string
+                  example: sangini
+                company:
+                  type: string
+                  example: iroid
+                floor:
+                  type: string
+                  example: 1
+                houseNumber:
+                  type: string
+                  example: "109"
+                apartmentNo:
+                  type: string
+                  example: 318
+                street:
+                  type: string
+                  example: street road
+                additionalDirection:
+                  type: string
+                  example: "right-left"
+                countryCode:
+                  type: string
+                  example: "+91"
+                mobileNumber:
+                  type: string
+                  example: "1111122222"
+                landlineNumber:
+                  type: string
+                  example: "ABCD"
+                latitude:
+                  type: string
+                  example: 0.0
+                longitude:
+                  type: string
+                  example: 0.0
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "409":
+          $ref: "#/components/responses/ConflictError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /address/edit-address/{addressId}:
+    put:
+      summary: Edit Address
+      description: |
+        - Edit Address
+      tags:
+        - Address
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          schema:
+            type: string
+            example: 63bd4dcff9e5e2f0107cb2f6
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: 0
+                buildingName:
+                  type: string
+                  example: sangini
+                company:
+                  type: string
+                  example: iroid
+                floor:
+                  type: string
+                  example: 1
+                houseNumber:
+                  type: string
+                  example: "109"
+                apartmentNo:
+                  type: string
+                  example: 318
+                street:
+                  type: string
+                  example: street road
+                additionalDirection:
+                  type: string
+                  example: "right-left"
+                countryCode:
+                  type: string
+                  example: "+91"
+                mobileNumber:
+                  type: string
+                  example: "1111122222"
+                landlineNumber:
+                  type: string
+                  example: "ABCD"
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /address/delete-address/{addressId}:
+    delete:
+      summary: Delete Address
+      description: |
+        - Delete address
+      tags:
+        - Address
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          schema:
+            type: string
+            example: 63bd4dcff9e5e2f0107cb2f6
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /address/address-list:
+    get:
+      summary: Lists of Addresses
+      tags:
+        - Address
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /address/setDefault-address/{addressId}:
+    post:
+      summary: Set default Address
+      security:
+        - bearerAuth: []
+      tags:
+        - Address
+
+      parameters:
+        - in: path
+          name: addressId
+          required: true
+          schema:
+            type: string
+            example: 64649805079ebe243d241c6d
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /address/default-address:
+    get:
+      summary: Get default address
+      tags:
+        - Address
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /stripe/new-card:
+    post:
+      description: create stripe card
+      summary: Card create
+      security:
+        - bearerAuth: []
+      tags:
+        - Stripe Payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                  example: John deo
+                cardNumber:
+                  type: integer
+                  example: 4242424242424242
+                cvc:
+                  type: integer
+                  example: 578
+                expMonth:
+                  type: integer
+                  example: 12
+                expYear:
+                  type: integer
+                  example: 25
+                isDefault:
+                  type: boolean
+                  example: false
+              required:
+                - fullName
+                - cardNumber
+                - cvc
+                - expMonth
+                - expYear
+                - isDefault
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /stripe/card-list:
+    get:
+      summary: Cards listing
+      tags:
+        - Stripe Payment
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /stripe/edit-card/{cardId}:
+    post:
+      summary: Edit card details
+      security:
+        - bearerAuth: []
+      tags:
+        - Stripe Payment
+
+      parameters:
+        - in: path
+          name: cardId
+          required: true
+          schema:
+            type: string
+            example: 64649805079ebe243d241c6d
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                fullName:
+                  type: string
+                  example: John deo
+                cardNumber:
+                  type: integer
+                  example: 4242424242424242
+                cvc:
+                  type: integer
+                  example: 578
+                expMonth:
+                  type: integer
+                  example: 12
+                expYear:
+                  type: integer
+                  example: 25
+              required:
+                - fullName
+                - cardNumber
+                - cvc
+                - expMonth
+                - expYear
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /stripe/delete-card/{cardId}:
+    delete:
+      summary: Delete card
+      security:
+        - bearerAuth: []
+      tags:
+        - Stripe Payment
+
+      parameters:
+        - in: path
+          name: cardId
+          required: true
+          schema:
+            type: string
+            example: 64649805079ebe243d241c6d
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+    # contact support
+  /contact-support:
+    post:
+      deprecated: false
+      summary: Customer contact support
+      security:
+        - bearerAuth: []
+      tags:
+        - Contact Support
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Rutvik Makvana
+                email:
+                  type: string
+                  example: rutvik@mailinator.com
+                message:
+                  type: string
+                  example: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry.
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /notification/history:
+    get:
+      summary: Notification history for customer
+      description:  |
+        ***notificationType :**
+        ```
+          BUYER: {
+            COD: {
+              ORDERPLACED: 1,
+              PROCESSING: 2,
+              OUTOFDELIVERY: 3,
+              DELIVERED: 4,
+            },
+            SKIPCASH: {
+              ORDERPLACED: 1,
+              PAYMENTCONFIRM: 2,
+              PROCESSING: 3,
+              OUTOFDELIVERY: 4,
+              DELIVERED: 5,
+            },
+         
+            CANCELLED: 6,
+            RETURNED: 7,
+            REFUNDED: 8
+          }
+         
+          SELLER: {
+            SUBMITTED: 1,
+            UNDERREVIEW: 2,
+            PARCIALACCEPTANCE: 3,
+            ORDERREJECTED: 4,
+            COMPLETED: 5,
+            CANCELLED: 6,
+            PRICE_CHANGE: 7,
+            REJECTION_REASON: 8,
+          }
+          ```
+      tags:
+        - Notifications
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /notification/readAt:
+    post:
+      summary: Read the notification
+      tags:
+        - Notifications
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+    #Super Admin
+  /auth/super-admin-login:
+    post:
+      summary: Super Admin login
+      description: |
+        - login.
+      tags:
+        - Super Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: superadmin@mailinator.com
+                password:
+                  type: string
+                  example: superadmin@123
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+        "422":
+          $ref: "#/components/responses/UnprocessableEntity"
+
+  /quick-sell/sell-items:
+    get:
+      summary: history of sell items
+      description: |
+        **Type :**
+        ```
+        * 0 -> Selling Order History  
+        * 1 -> Buying Order History
+        ```
+
+         **Buyer Status :**
+
+        ``` 
+        -->  For Cash On Delivery 
+
+        * 1 -> Order Placed
+        * 2 -> Processing
+        * 3 -> Out for Delivery
+        * 4 -> Delivered
+        * 6 -> Cancelled
+        * 7 -> Returned
+        * 8 -> Refunded
+
+        --> For SkipCash
+
+        * 1 -> Order Placed
+        * 2 -> Payment Confirmed
+        * 3 -> Processing
+        * 4 -> Out for Delivery
+        * 5 -> Delivered
+        * 6 -> Cancelled
+        * 7 -> Returned
+        * 8 -> Refunded
+
+        => Buyer product status :- 
+            * 4 -> Delivered
+            * 5 -> Refunded
+            * 6 -> Returned
+
+        ```
+
+        **Seller Status :**
+        ``` 
+        --> Complete Order Status :- 
+        * 1 -> Submitted
+        * 2 -> Under Review
+        * 3 -> Partial Acceptance
+        * 4 -> Order Rejected
+        * 5 -> Completed
+
+        --> Particular Order Items status :-
+        * 1 -> Item Submitted
+        * 2 -> Item Under Review
+        * 3 -> Item Accepted
+        * 4 -> Item Rejected
+        * 5 -> Item Completed
+
+        ```
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /quick-sell/see-details:
+    get:
+      summary: Full details of selling & buying order
+      description: |
+        **Type :**
+        ```
+        * 0 -> Selling Order History  
+        * 1 -> Buying Order History
+        ```
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+
+        - in: query
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 64feea624b9c4a61782a15e7
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /quick-sell/assign-member:
+    post:
+      summary: assign member
+      description: |
+        - assign member to particular order
+
+        **Type :**
+        ```
+        * 0 -> Selling Order History  
+        * 1 -> Buying Order History
+        ```
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: string
+            enum:
+              - 0
+              - 1
+
+        - in: query
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 65671c3b4c662b30d0b57f59
+
+        - in: query
+          name: memberId
+          required: true
+          schema:
+            type: string
+            example: 656dbaa6afd39846920f4782
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /quick-sell/update-order-status:
+   post:
+      summary: Update Order status
+      description: |
+        - Update order status and item status for both buying and selling flow
+
+        **type :**
+        ```
+        * 0 -> Selling Order History  
+        * 1 -> Buying Order History
+        ```
+
+        **PaymentType :**
+        ```
+          paymentType 1 - Cash On Delivery
+          paymentType 2 - SkipCash
+        ```
+
+        **Buyer Status Value :**
+        ``` 
+        -->  For Cash On Delivery 
+
+        * 1 -> Order Placed
+        * 2 -> Processing
+        * 3 -> Out for Delivery
+        * 4 -> Delivered
+        * 6 -> Cancelled
+
+        --> For SkipCash
+
+        * 1 -> Order Placed
+        * 2 -> Payment Confirmed
+        * 3 -> Processing
+        * 4 -> Out for Delivery
+        * 5 -> Delivered
+        * 6 -> Cancelled
+       
+        ```
+
+        **Seller Status Value :**
+        ``` 
+        --> Complete Order Status :- 
+        * 1 -> Submitted
+        * 2 -> Under Review
+        * 3 -> Partial Acceptance
+        * 4 -> Order Rejected
+        * 5 -> Completed
+
+        --> Particular Order Items status :-
+        * 1 -> Item Submitted
+        * 2 -> Item Under Review
+        * 3 -> Item Accepted
+        * 4 -> Item Rejected
+        * 5 -> Item Completed
+
+        ```
+
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: type
+          required: true
+          schema:
+            type: number
+            enum:
+              - 0
+              - 1
+
+        - in: query
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 65671c3b4c662b30d0b57f59
+
+        - in: query
+          name: paymentType
+          schema:
+            type: number
+            example: 1
+
+        - in: query
+          name: statusValue
+          required: true
+          schema:
+            type: number
+            example: 1
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /quick-sell/update-item-status:
+   post:
+      summary: Update Item status
+      description: |
+        - update selling order item status
+
+        **Seller Status Value :**
+        ``` 
+        --> Complete Order Status :- 
+        * 1 -> Submitted
+        * 2 -> Under Review
+        * 3 -> Partial Acceptance
+        * 4 -> Order Rejected
+        * 5 -> Completed
+
+        --> Particular Order Items status :-
+        * 1 -> Item Submitted
+        * 2 -> Item Under Review
+        * 3 -> Item Accepted
+        * 4 -> Item Rejected
+        * 5 -> Item Completed
+
+        ```
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 65671c3b4c662b30d0b57f59
+
+        - in: query
+          name: itemId
+          required: true
+          schema:
+            type: string
+            example: 65671c3b4c662b30d0b57f59
+
+        - in: query
+          name: statusValue
+          required: true
+          schema:
+            type: number
+            example: 1
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /quick-sell/price-request:
+   post:
+      summary: Send price change request
+      description:  |
+        ```
+        ->  Send price change request
+
+          status - 3
+          - pass only itemId, price, status
+           
+          status - 4
+          - pass only itemId, status, rejectionReason
+
+        ```
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 66b5b594a8f55bf2a51ce1f3
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: string
+                  example: [{ itemId: "66b5b593a8f55bf2a51ce1f0", price: 5000, status: 3, rejectionReason: "High asking price" }, { itemId: "66b5b5a8a8f55bf2a51ce1fc", price: 6000, status: 3, rejectionReason: "High asking price" }]
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"    
+
+  /quick-sell/send-rejection-reason:
+   post:
+      summary: Send rejection reason
+      description: |
+        ```
+        -> Send rejection reason
+        ``` 
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: orderId
+          required: true
+          schema:
+            type: string
+            example: 65671c3b4c662b30d0b57f59
+
+        - in: query
+          name: itemId
+          required: true
+          schema:
+            type: string
+            example: 65671c3b4c662b30d0b57f59
+
+        - in: query
+          name: rejectionReason
+          required: true
+          schema:
+            type: string
+            example: High asking Price
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"    
+
+  /quick-sell/item-details:
+    get:
+      summary: get one item details
+      description: |
+        - get one item details
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: itemId
+          required: true
+          schema:
+            type: string
+            example: 64feea624b9c4a61782a15e7
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+
+  /members/member-list:
+    get:
+      summary: member list
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /super-check-version:
+    post:
+      summary: Check super admin app version
+      description: |
+        | status        | meaning           |
+        | ------------- |:-------------:|
+        | ***Recommended Update***      | 2 |
+        | ***Force Update***      | 1 |
+        | ***Up to date***      | 0 |
+        | ***role***      | 1 - Super admin |
+      tags:
+        - Super Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platform:
+                  type: string
+                  enum: [iOS, Android]
+                version:
+                  type: string
+                  example: "1.0.0"
+                role:
+                  type: integer
+                  example: 1
+      responses:
+        "200":
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Your app is up to date
+                  status:
+                    type: integer
+                    example: 0
+                  appLink:
+                    type: string
+                    example: ""
+
+  /fcm/super-admin-token:
+    post:
+      deprecated: false
+      description: | 
+       ``` 
+        Register device token.
+
+        userType :- 2 for Super admin
+       ```
+      summary: Register token
+
+      tags:
+        - Super Admin
+      security:
+        - bearerAuth: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: def5020075819e4748adefe1f860566c3b41437f2b7e396db025b4d384e6b5db5911a3cfc22
+                deviceId:
+                  type: string
+                  example: SP1A.210812.016
+                deviceType:
+                  type: string
+                  example: Android
+                userType: 
+                  type: number
+                  example: 2
+              required:
+                - token
+                - deviceId
+                - deviceType
+                - userType
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "400":
+          $ref: "#/components/responses/BadRequestError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /admin-notification/history:
+    get:
+      summary: Notification history for super admin
+      description:  |
+        ***Super admin notificationType :  :**
+        ```
+          BUYER: {
+            ORDERPLACED: 1,
+            PAYMENTCONFIRM: 2,
+            CANCELLED: 3,
+            EXCHANGEREQUEST: 4
+          },
+
+          SELLER: {
+            SUBMITTED : 5,
+          },
+
+          ACCEPT_PRICE_REQUEST: 6,
+          REJECT_PRICE_REQUEST : 7
+          ```
+      tags:
+        - Admin Notifications
+      security:
+        - bearerAuth: []
+
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /admin-notification/readAt:
+    post:
+      summary: Read the notification
+      tags:
+        - Admin Notifications
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
+
+  /admin-notification/un-read:
+    get:
+      summary: Un read notification count
+      tags:
+        - Admin Notifications
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/NotFoundError"
